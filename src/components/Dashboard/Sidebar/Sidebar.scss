@@ -1,0 +1,226 @@
+.dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 16.25rem;
+  background: white;
+  border-right: 1px solid rgba(148, 163, 184, 0.35);
+  height: 100vh;
+  position: sticky;
+  transition: width ease-in 0.5s;
+  overflow: hidden;
+  top: 0;
+
+  &__burger {
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    span {
+      width: 1.25rem;
+      height: 0.1875rem;
+      background-color: var(--color-primary);
+      border-radius: 3.125rem;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem 1.5rem;
+    height: 4rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+    gap: 0.625rem;
+  }
+
+  &__logo {
+    font-size: var(--font-size-18-24);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin: 0;
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    flex: 1;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, 
+    gap 0.5s ease-in;
+    color: #64748b;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &--active {
+      background-color: rgba(19, 91, 236, 0.2);
+      color: var(--color-primary);
+
+      .dashboard-sidebar__icon {
+        color: var(--color-primary);
+      }
+
+      .dashboard-sidebar__label {
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__icon {
+    font-size: 1.5rem;
+    color: #64748b;
+  }
+
+  &__label {
+    font-size: var(--font-size-14-16);
+    font-weight: 500;
+    margin: 0;
+    color: #1e293b;
+    transition: all 0.5s ease-in;
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding: 1rem;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  &__avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__user-name {
+    font-size: var(--font-size-14-16);
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__logout {
+    font-size: var(--font-size-12-18);
+    font-weight: 400;
+    color: #64748b;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: underline;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &.hide {
+    width: 5.25rem;
+
+    .dashboard-sidebar__header  {
+      justify-content: flex-start;
+    }
+
+    .dashboard-sidebar__item {
+      position: relative;
+      gap: 0;
+    }    
+
+    .dashboard-sidebar__label {
+      opacity: 0;
+      visibility: hidden;
+      overflow: hidden;
+    }
+
+    .dashboard-sidebar__item--hide {
+      justify-content: center;
+      
+      .dashboard-sidebar__label {
+        position: absolute;
+      }
+    }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .dashboard-sidebar {
+    background: #192131;
+    border-right-color: rgba(148, 163, 184, 0.2);
+
+    &__item {
+      color: #94a3b8;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    &__label {
+      color: #cbd5e1;
+    }
+
+    &__icon {
+      color: #94a3b8;
+    }
+
+    &__user-name {
+      color: white;
+    }
+
+    &__logout {
+      color: #94a3b8;
+    }
+  }
+}
+@media (max-width: 1024px) {
+  .dashboard-sidebar {
+    width: 13rem;
+
+    &__nav,
+    &__footer {
+      padding: 0.5rem; 
+    }
+
+    &__item {
+      padding: 0.25rem;
+    }
+    
+  }
+}

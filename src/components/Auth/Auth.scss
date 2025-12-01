@@ -1,0 +1,104 @@
+.auth-card {    
+    max-width: 490px;
+    width: 100%;
+    background: var(--color-card);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+    margin: 10px;
+}
+.auth-card {
+    .logo {
+        margin-bottom: 24px;
+    }
+
+    .ant-radio-group {
+        width: 100%;
+        display: flex;
+
+        label {
+            flex-grow: 1;
+            text-align: center;
+        }
+    }
+
+    .auth-title {
+        color: var(--text-color-primary);
+        margin-bottom: 20px;
+    }
+
+    .auth-subtitle {
+        margin-bottom: 24px;
+        color: var(--text-color-second);
+    }
+
+    .input-wrapper,
+    .tabs {
+        margin-bottom: 18px;   
+    }
+
+    .ant-form {
+        margin-bottom: 20px;
+
+        .btn  {
+           width: 100%;
+        }
+    }
+
+    .auth-card__bottom {
+        color: var(--text-color-second);
+        text-align: center;
+
+        a {
+            color: var(--color-primary);
+            transition: text-decoration .3s ease-in;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .password-strength {
+        display: flex;
+        gap: 6px;
+        margin-top: 5px;
+
+        span {
+            height: 6px;
+            flex-grow: 1;
+            border-radius: 999px;
+            background: var(--text-color-third);
+            transition: background .6s ease-in;
+
+            &.is-active {
+                background: var(--color-primary);
+            }
+        }
+    }
+}
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 20px;
+    }
+}
+@media (max-width: 500px) {
+    .auth-card .ant-radio-group {
+        flex-wrap: wrap;
+
+        .ant-radio-button-wrapper {
+            border-radius: 0;
+
+            &:first-child {
+               border-top-left-radius: 6px;
+               border-top-right-radius: 6px;
+            }
+
+            &:last-child {
+               border-bottom-left-radius: 6px;
+               border-bottom-right-radius: 6px;
+            }
+        }
+    }   
+}

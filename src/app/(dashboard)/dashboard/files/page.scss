@@ -1,0 +1,17 @@
+
+.info-block .dasboard-page__info-title-top {
+    color: var(--color-primary);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+.FAQ-item__content-files-page {
+    .FAQ-item__content {
+        max-width: 800px;
+        width: 100%;
+
+        p,
+        li {
+            color: var(--bg-second);
+        }
+    }
+}

@@ -1,0 +1,193 @@
+.domains-table {
+  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-primary);
+
+  .ant-table-row .ant-table-cell:not(.ant-table-cell-row-hover) {
+    background: var(--color-card);
+  }
+
+  .dashboard-header__icon {
+    font-size: 18px;
+    color: var(--text-color-second);
+  }
+
+  &__settings {
+    display: flex;
+    justify-content: space-around;
+    gap: 0.625rem;
+
+    &-btn {
+      background-color: transparent;
+      border: transparent;
+      cursor: pointer;
+      
+      span {
+        transition: color .3s;
+      }
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    font-size: var(--font-size-18-24);
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  &__add-button {
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-14-16);
+    font-weight: 600;
+    color: white;
+    background: var(--color-primary);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: var(--color-second);
+    }
+  }
+
+  &__wrapper {
+    overflow-x: auto;
+    margin: 0 -1.5rem -1.5rem;
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  &__th {
+    padding: 0.875rem 0.75rem;
+    text-align: left;
+    font-size: var(--font-size-14-16);
+    font-weight: 600;
+    color: #0f172a;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+
+    &--actions {
+      text-align: right;
+    }
+  }
+
+  &__row {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__td {
+    padding: 1rem 0.75rem;
+    font-size: var(--font-size-14-16);
+    white-space: nowrap;
+
+    &--domain {
+      font-weight: 500;
+      color: #0f172a;
+    }
+
+    &--date {
+      color: #64748b;
+    }
+
+    &--actions {
+      text-align: right;
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: var(--font-size-12-18);
+    font-weight: 500;
+
+    &--active {
+      background: rgba(54, 179, 126, 0.2);
+      color: #36B37E;
+    }
+
+    &--expired {
+      background: rgba(222, 53, 11, 0.2);
+      color: #DE350B;
+    }
+  }
+
+  &__link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: rgba(19, 91, 236, 0.8);
+      text-decoration: underline;
+    }
+  }
+}
+.domains-table__modal-serch {
+  min-width: 230px;
+  padding: 0.3125rem;
+
+  &-buttons {
+    margin-top: 5px;
+    display: flex;
+    gap: 5px;
+
+    .btn {
+      flex-grow: 1;
+    }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .domains-table {
+    background: #192131;
+    border-color: rgba(148, 163, 184, 0.2);
+
+    &__title {
+      color: white;
+    }
+
+    &__th {
+      color: white;
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+
+    &__row {
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+
+    &__td {
+      &--domain {
+        color: white;
+      }
+
+      &--date {
+        color: #94a3b8;
+      }
+    }
+  }
+}

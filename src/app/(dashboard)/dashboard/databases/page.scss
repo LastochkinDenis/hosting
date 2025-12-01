@@ -1,0 +1,25 @@
+.database-page {
+    .FAQ-item {
+        background-color: var(--color-card);
+        border-radius: 0.5rem;
+        border: 1px solid var(--border-primary);
+        padding: 0 1rem;
+        margin-bottom: 1rem;
+
+        &__header {
+            padding: 1rem 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &.active {
+            padding-bottom: 1.25rem;
+        }
+
+        &__content {
+            color: var(--bg-second);
+        }
+    }   
+}
