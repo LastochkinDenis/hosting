@@ -3,12 +3,12 @@ import { CHECK_DOMAIN, SUGGESTIONS_DOMAIN } from '@/lib/api_endpoint';
 import './SearchDomen.scss';
 import { instance } from '@/lib/axios_settings';
 import Tabs from '@/Ui/tabs/Tabs';
-import { IDomenResponse } from '@/types/domain';
+import BuyDomain from '@/components/BuyDomain/BuyDomain';
+import { IDomenSearch } from '@/types/domain';
 
 import { AutoComplete} from 'antd';
 import type { AutoCompleteProps, GetRef } from 'antd';
 import React, { useState, useRef, JSX } from "react";
-import { useRouter } from 'next/navigation';
 
 const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
   func: F,
@@ -32,27 +32,31 @@ const TOP_LEVEL_DOMEN = [{key: '.ru', text: '.ru'}, {key: '.com', text: '.com'},
 const DEFAULT_TOP_LEVEL_DOMEN = '.ru';
 
 export default function SearchDomen() {
-    const [optionSearch, setOptionSearch] = useState<AutoCompleteProps['options']>([]);
+    const [dataDomains, setDataDomains] = useState<Array<IDomenSearch>>([]);
+    const [selectDomain, setSelectDomain] = useState<IDomenSearch>();
     const [topLevelDomain, setTopLevelDomain] = useState<string>(DEFAULT_TOP_LEVEL_DOMEN);
     const [searchValue, setSearchValue] = useState<string>('');
     const [error, setError] = useState<Array<string>>([]);
     const [isLoad, setIsLoad] = useState<boolean>(false);
     const [isShowDomainsList, setIsShowDomainsList] = useState<boolean>(false);
+    const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const ref = useRef<autoCompleteRefType | null>(null);
-    const router = useRouter();
 
-    const renderSerchOption = (dataDomain: IDomenResponse): seacrhItem => {
-        return {
-            value: dataDomain.dname,
-            label: (<div className='domain-serch-item'>
-                <div className='domain-serch-item__data'>
-                    { dataDomain.available ? <span className="available item-successful">Доступен</span> :
-                    <span className="available item-error">Занят</span> }
-                    <span className='domain-serch-item__dname h4'>{dataDomain.dname}</span>
-                </div>
-                {dataDomain.price && <span className='domain-serch-item__price h4'>{dataDomain.price.toLocaleString('ru-RU')} &#8381;</span>}
-            </div>)
-        }
+    const renderSerchOption = (dataDomain: Array<IDomenSearch>): AutoCompleteProps['options'] => {
+        return dataDomains.reduce((result, item) => {
+            result.push({
+                value: item.dname,
+                label: (<div className='domain-serch-item'>
+                    <div className='domain-serch-item__data'>
+                        { item.available ? <span className="available item-successful">Доступен</span> :
+                        <span className="available item-error">Занят</span> }
+                        <span className='domain-serch-item__dname h4'>{item.dname}</span>
+                    </div>
+                    {item.price && <span className='domain-serch-item__price h4'>{item.price.toLocaleString('ru-RU')} &#8381;</span>}
+                </div>)
+            })
+            return result;
+        }, [] as Array<seacrhItem>)
     }
 
     const onSearch = debounce((searchText:string) => {
@@ -78,7 +82,16 @@ export default function SearchDomen() {
     }, 500);
 
     const onSelect = (data:string) => {
-        router.push(`/dashboard/?dname=${data}`);
+        const domain = dataDomains.find(item => item.dname == data);
+
+        
+        if(domain === undefined) return
+        
+        //Добавить уведомление
+        if(!domain.available) return
+        
+        setSelectDomain(domain);
+        setIsOpenModal(true);
     }
 
     const onChangeTab = (key: string, isChecked: boolean) => {         
@@ -94,7 +107,7 @@ export default function SearchDomen() {
             setIsLoad(true);
             const serchDomain:string = searchValue + (searchValue.endsWith(topLevelDomain) ? '' : topLevelDomain);
     
-            const responseDomains:Array<IDomenResponse> = [];
+            const responseDomains:Array<IDomenSearch> = [];
             
             //Получение похожих доменов
             await instance.get(SUGGESTIONS_DOMAIN + `${serchDomain}`, { params: { limit: 10 } })
@@ -131,15 +144,8 @@ export default function SearchDomen() {
                 console.log(e);
             });
 
-            setOptionSearch(
-                responseDomains.reduce((result, item) => {
-                    result.push(renderSerchOption(item));
-                    return result;
-                }, [] as Array<seacrhItem>)
-            );
-
+            setDataDomains(responseDomains);
             setIsLoad(false);
-            
             ref.current?.focus();            
         } else {
             const errorList = [];
@@ -155,39 +161,42 @@ export default function SearchDomen() {
         }
     }
 
-    return <div className="search-domen">
-        <h2 className="h3 search-domen__title">
-            Найдите свой идеальный домен
-        </h2>
-        <div className="search-domen__serch">
-            <AutoComplete
-                style={{width: '100%', height: 'auto'}}
-                options={optionSearch}
-                onSearch={onSearch}
-                onSelect={onSelect}
-                showSearch={true}
-                status={error.find(item => item == 'AutoComplete') ? 'error' : ''}
-                placeholder="Введите желаемое имя домена"
-                prefix={<span className="material-symbols-outlined dashboard-header__search-icon">search</span>}
-                onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                    if(e.code == 'Enter') {
-                        getDomains();
-                    }
-                }}
-                open={isShowDomainsList}
-                onFocus={() => {
-                    setIsShowDomainsList(true);
-                }}
-                onBlur={() => {
-                    setIsShowDomainsList(false);
-                }}
-                ref={ref}
-            />
-            {
-                isLoad ? <button className='btn' disabled><span className="material-symbols-outlined load">progress_activity</span> <span className=''></span> Загрузка...</button> :
-                <button className="btn" onClick={() => getDomains()}>Проверить</button>
-            }
+    return <>
+        <div className="search-domen">
+            <h2 className="h3 search-domen__title">
+                Найдите свой идеальный домен
+            </h2>
+            <div className="search-domen__serch">
+                <AutoComplete
+                    style={{width: '100%', height: 'auto'}}
+                    options={renderSerchOption(dataDomains)}
+                    onSearch={onSearch}
+                    onSelect={onSelect}
+                    showSearch={true}
+                    status={error.find(item => item == 'AutoComplete') ? 'error' : ''}
+                    placeholder="Введите желаемое имя домена"
+                    prefix={<span className="material-symbols-outlined dashboard-header__search-icon">search</span>}
+                    onInputKeyDown={(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                        if(e.code == 'Enter') {
+                            getDomains();
+                        }
+                    }}
+                    open={isShowDomainsList}
+                    onFocus={() => {
+                        setIsShowDomainsList(true);
+                    }}
+                    onBlur={() => {
+                        setIsShowDomainsList(false);
+                    }}
+                    ref={ref}
+                />
+                {
+                    isLoad ? <button className='btn' disabled><span className="material-symbols-outlined load">progress_activity</span> <span className=''></span> Загрузка...</button> :
+                    <button className="btn" onClick={() => getDomains()}>Проверить</button>
+                }
+            </div>
+            <Tabs type='radio' tabs={TOP_LEVEL_DOMEN} name='top-domen' currentValue={topLevelDomain} callBack={onChangeTab} className={error.find(item => item == 'Tabs') ? 'error' : ''} />
         </div>
-        <Tabs type='radio' tabs={TOP_LEVEL_DOMEN} name='top-domen' currentValue={topLevelDomain} callBack={onChangeTab} className={error.find(item => item == 'Tabs') ? 'error' : ''} />
-    </div>
+        <BuyDomain isOpen={isOpenModal} callbackSetIsOpen={() => setIsOpenModal(false)} domain={selectDomain} />
+    </>
 }

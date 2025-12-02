@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 // export function useDebounce<T extends Function>(func: T, delay: number): T {
@@ -29,34 +30,47 @@ export function setSearchParam(search: string, param: string, value: string) {
     return '?' + searchParam.toString();
 }
 
-export function useLatest<T>(current: T) {
+export function useLatest<T>(current: T): React.RefObject<T> {
     const storeValue = useRef(current)
 
     useLayoutEffect(() => {
         storeValue.current = current
     }, []);
 
-    return storeValue.current;
+    return storeValue;
+}
+
+type UpdateFuction<T> = (prev: T | null) => T;
+
+function isUpdateFuction<T>(obj: unknown): obj is UpdateFuction<T> {
+    if(typeof obj === 'function') {
+        return true;
+    }
+    return false;
 }
 
 export function useSearchParamsStore<T>(
     param: string,
     defaultValue?: T,
     serializer = String,
-    deserializer: (v:string) => T = (v) => v as T ): [T | undefined, (value: T) => void] {
+    deserializer: (v:string) => T = (v) => v as T ): [T | null, (value: T) => void] {
+    const [data, setData] = useState<T | null>(typeof defaultValue != 'undefined' ? defaultValue : null);
+    const lastestValue = useLatest(data);
 
-    const [data, setData] = useState<T | undefined>(() => {
-        if(typeof defaultValue == 'undefined') {
-            setSearchParam(window.location.search, param, serializer(defaultValue));
+    const onUpdate = useCallback((newValue: T | UpdateFuction<T>) => {
+
+        let value: T;
+
+        if(isUpdateFuction<T>(newValue)) {
+            value = newValue(lastestValue.current);
+        } else {
+            value = newValue;
         }
 
-        return defaultValue;
-    });
-
-    const onUpdate = useCallback((value: T) => {
         setData(value);
-        history.pushState(null, '', window.location.pathname + setSearchParam(window.location.search, param, serializer(value)));
-    }, [param, deserializer]);
+
+        history.pushState(null, '', window.location.pathname + setSearchParam(window.location.search, param, serializer(newValue)));
+    }, [param, deserializer, lastestValue]);
         
     return [data, onUpdate];
 }

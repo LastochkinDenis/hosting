@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/authStore';
 import '@ant-design/v5-patch-for-react-19'; //!!!!! Понизить версю react до 18 !!!!!
 
 import React, { useState, useEffect } from 'react';
-import {useRouter, redirect, RedirectType} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import { Form, Input, ConfigProvider, Radio } from "antd";
 import { Rule } from 'antd/es/form';
 import type { FormProps, RadioChangeEvent } from "antd";

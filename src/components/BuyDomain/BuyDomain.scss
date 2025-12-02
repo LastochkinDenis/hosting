@@ -1,0 +1,78 @@
+.buy-domain {
+    &-part {
+        margin-bottom: 1rem;
+
+        &__title {
+            color: var(--text-color-primary);
+            margin-bottom: 0.375rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        &__subtitle {
+            color: var(--text-color-third);
+        }
+    }
+
+    .input-span {
+        font-size: var(--font-size-14);
+        color: var(--text-color-third);
+    }
+
+    &__bottom {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+    }
+
+    &__top {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding-top: 0.2rem;
+        padding-bottom: 0.5rem;
+        background-color: var(--color-card);
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+
+        .clouse {
+            cursor: pointer;
+            background-color: transparent;
+            border: transparent;
+            transition: color .3s ease-in;
+
+            :hover {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    .buy-domain {
+        &__register {
+            border: 1px solid var(--color-second);
+            background-color: var(--bg-third);
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+    
+            &-icon {
+                color: var(--color-primary);
+                font-size: 2rem;
+            }
+    
+            &-data-title {
+                color: var(--color-primary);
+            }
+    
+            &-data-dname {
+                color: var(--color-primary);
+            }
+        }
+    }
+}

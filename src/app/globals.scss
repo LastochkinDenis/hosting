@@ -16,6 +16,7 @@
   --bg-primary: rgba(248, 250, 252, 0.9);
   --bg-head:rgb(19 91 236 / 0.1);
   --bg-second: #4C4C4C;
+  --bg-third: rgb(239 246 255);
 
   --error: #FF0000;
 
@@ -150,10 +151,10 @@ li {
   gap: 8px;
   padding: 12px 18px;
   border-radius: 12px;
-  border: none;
+  border: 1px solid var(--color-primary);
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition: all .2s ease-in;
   background-color: var(--color-primary);
   color: var(--color-card);
   font-size: var(--font-size-14-16);
@@ -174,19 +175,35 @@ li {
 
   &.second {
     background-color: var(--text-color-second);
+    border: 1px solid var(--text-color-second);
     color: var(--color-card);
+  }
+
+  &.border {
+    border: 1px solid var(--border-primary);
+    background-color: transparent;
+    color: var(--text-color-third);
   }
 
   &:not(:disabled) {
     &:hover {
       background-color: var(--color-second);
+      border: 1px solid var(--color-second);
   
       box-shadow: 0px 0px 3px 0px var(--color-second);
   
       &.second {
+        border: 1px solid var(--text-color-third);
         background-color: var(--text-color-third);
         box-shadow: 0px 0px 3px 0px var(--text-color-third);
         color: var(--color-card);
+      }
+
+      &.border {
+        border: 1px solid var(--border-primary);
+        background-color: var(--border-primary);
+        color: var(--background);
+        box-shadow: none;
       }
     }
   }
@@ -210,6 +227,11 @@ li {
 .container {
   max-width: 1560px;
   width: 100%;
+}
+
+.ant-modal-root {
+  position: relative;
+  z-index: 1051;
 }
 
 @media (prefers-color-scheme: dark) {

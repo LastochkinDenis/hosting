@@ -1,4 +1,4 @@
-export interface IDomenResponse {
+export interface IDomenSearch {
     dname: string;
     price: number | null;
     available: boolean;
