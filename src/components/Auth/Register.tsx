@@ -134,6 +134,7 @@ export default function Register() {
                 <Form
                 name="register"
                 onFinish={onSubmit}
+                validateTrigger='onSubmit'
                 >
                     <div className='input-wrapper'>
                         <Form.Item name="typeUser" initialValue={typeUser}>

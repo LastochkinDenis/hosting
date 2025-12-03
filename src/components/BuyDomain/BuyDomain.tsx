@@ -1,3 +1,4 @@
+'use client';
 import './BuyDomain.scss';
 import { IDomenSearch } from "@/types/domain";
 import InputWrapper from '@/Ui/Input/InputWrapper'
@@ -6,6 +7,7 @@ import { Modal, Form, Input, Select, DatePicker, Col, Row, ConfigProvider } from
 import type { FormProps } from 'antd'
 import { Rule } from 'antd/es/form';
 import { useEffect } from 'react';
+import {MaskedInput} from 'antd-mask-input'
 
 interface IProps {
     isOpen: boolean;
@@ -38,17 +40,38 @@ const NS1_DEFAULT_VALUE = 'ns1.reg.ru'
 const NS2_DEFAULT_VALUE = 'ns2.reg.ru'
 
 export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps) {
+    const [form] = Form.useForm()
 
     useEffect(() => {
         if(typeof domain == 'undefined') {
             callbackSetIsOpen(false);
         }
-    }, [domain])    
+    }, [domain]);
 
-    //TODO Доделать валидацию телефлна и сдлеать на него маску
+    const validatePhone = (rule: Rule, value: string, callback: () => void) => {
+        if(!/^\(\+7\) \d{3} \d{3}-\d\d-\d\d/.test(value)) return Promise.reject();
+
+        return Promise.resolve();
+    }
+
+    const validatePassporSerialNumber = (rule: Rule, value: string, callback: () => void) => {
+        // Прядовращает другие проврки так как поле не обязательное и пустое
+        if('____ ______' == value || '' == value) return Promise.resolve();
+
+        if(!/\d{4} \d{6}/.test(value)) return Promise.reject()
+        return Promise.resolve();
+    }
+
+    const onFinishFailed:FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+
+    }
 
     const onSubmit:FormProps<FieldType>['onFinish'] = (values) => {
         console.log(values)
+    }
+
+    const onRest = () => {
+        form?.resetFields();
     }
 
     return <Modal
@@ -81,7 +104,10 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
                     }}}}>
                 <Form
                     name="domain_register"
+                    form={form}
                     onFinish={onSubmit}
+                    onFinishFailed={onFinishFailed}
+                    validateTrigger='onSubmit'
                 >
                     <InputWrapper label="Период регистрации (лет)" id="domain_register_registation_period">
                         <Form.Item<FieldType>
@@ -180,17 +206,21 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
                             </InputWrapper>
                         </Col>
                         <Col span={24} lg={12}>
-                            {/* TODO Сдлетаь маску */}
                             <InputWrapper label="Телефон *" id="domain_register_phone">
                                 <Form.Item<FieldType>
                                     name="phone"
                                     rules={[
                                         { required: true, message: 'Небходимо ввести телефон' },
-                                        { max: 15, message: 'Максимальный размер телефона 15' },
-                                        { min: 11, message: 'Минимальный размер телефона 11' }
+                                        { validator: validatePhone, message: 'Некорректный телефон' }
                                     ]}
                                     >
-                                        <Input id="domain_register_phone" type="tel" placeholder="Телефон" />
+                                        <MaskedInput 
+                                            mask={[{
+                                                mask: "(+7) 000 000-00-00",
+                                                lazy: false,
+                                            }]} id="domain_register_phone" type="tel" placeholder='Телефон'
+                                        />
+                                        {/* <Input id="domain_register_phone" type="tel" placeholder="Телефон" /> */}
                                 </Form.Item>
                             </InputWrapper>
                         </Col>
@@ -224,12 +254,20 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
                     </div>
                     <Row gutter={[16, 8]}>
                         <Col span={24} lg={12}>
-                            {/* TODO Сдлетаь маску */}
                             <InputWrapper label="Серия и номер паспорта" id="domain_register_passpor_serial_number">
                                 <Form.Item<FieldType>
                                     name="passporSerialNumber"
+                                    rules={[
+                                        {validator: validatePassporSerialNumber, message: 'Некорректные паспортные данные'}
+                                    ]}
                                     >
-                                        <Input type="text" placeholder="Серия и номер паспорта" id="domain_register_passpor_serial_number" />
+                                        <MaskedInput
+                                            mask={[{
+                                                mask: '0000 000000',
+                                                lazy: false
+                                            }]}
+                                            type="text" id="domain_register_passpor_serial_number"
+                                        />
                                 </Form.Item>
                             </InputWrapper>
                         </Col>
@@ -323,6 +361,7 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
                         }}>
                             Отменить
                         </button>
+                        <button className='btn border' type='button' onClick={() => onRest()}>Отчистить</button>
                         <button className="btn" type="submit">
                             Зарегистрировать домен
                         </button>

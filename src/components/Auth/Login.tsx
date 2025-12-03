@@ -94,6 +94,7 @@ export default function Login() {
             }}>
                 <Form name="login"
                 onFinish={onSubmit}
+                validateTrigger="onSubmit"
                 >
                     <InputWrapper label="Email" id="login_email">
                         <Form.Item<FieldType>
