@@ -7,8 +7,8 @@ import BuyDomain from '@/components/BuyDomain/BuyDomain';
 import { IDomenSearch } from '@/types/domain';
 
 import { AutoComplete} from 'antd';
-import type { AutoCompleteProps, GetRef } from 'antd';
-import React, { useState, useRef, JSX } from "react";
+import { AutoCompleteProps, GetRef, notification } from 'antd';
+import React, { useState, useRef, JSX, useEffect } from "react";
 
 const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
   func: F,
@@ -41,6 +41,8 @@ export default function SearchDomen() {
     const [isShowDomainsList, setIsShowDomainsList] = useState<boolean>(false);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const ref = useRef<autoCompleteRefType | null>(null);
+
+    const [api, contextHolder] = notification.useNotification();
 
     const renderSerchOption = (dataDomain: Array<IDomenSearch>): AutoCompleteProps['options'] => {
         return dataDomains.reduce((result, item) => {
@@ -168,7 +170,7 @@ export default function SearchDomen() {
             </h2>
             <div className="search-domen__serch">
                 <AutoComplete
-                    style={{width: '100%', height: 'auto'}}
+                    style={{width: '100%', flexGrow: 1, height: '45px'}}
                     options={renderSerchOption(dataDomains)}
                     onSearch={onSearch}
                     onSelect={onSelect}

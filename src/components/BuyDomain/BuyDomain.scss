@@ -25,6 +25,7 @@
         display: flex;
         gap: 1rem;
         justify-content: flex-end;
+        flex-wrap: wrap;
     }
 
     &__top {
@@ -72,6 +73,19 @@
     
             &-data-dname {
                 color: var(--color-primary);
+            }
+        }
+    }
+}
+@media (max-width: 600px) {
+    .buy-domain {
+        &__bottom {
+            gap: 0.625rem;
+            .btn {
+                flex-grow: 1;
+            }
+            .btn[type="submit"] {
+                order: -1;
             }
         }
     }

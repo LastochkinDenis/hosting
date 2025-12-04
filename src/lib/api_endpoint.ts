@@ -10,6 +10,7 @@ export const USER_ME = '/users/me';
 // REGRU
 export const CHECK_DOMAIN = '/regru/check';
 export const SUGGESTIONS_DOMAIN = '/regru/suggest/';
+export const REGISTER_DOMAIN = '/regru/register'
 
 //DOMENS
 export const GET_USER_DOMAINS = '/domains';

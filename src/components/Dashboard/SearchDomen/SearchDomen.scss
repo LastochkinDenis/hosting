@@ -56,6 +56,16 @@
         }
     }
 
+
+    .ant-select-auto-complete {
+        .ant-select-selection-placeholder {
+            white-space: wrap;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            overflow: hidden;
+        }
+    }
 }
 .domain-serch-item {
     display: flex;
@@ -80,5 +90,39 @@
 @media (max-width: 1024px) {
     .search-domen {
         margin-bottom: 0.75rem;
+        padding: 1.25rem 1rem;
     }
+}
+@media (max-width: 768px) {
+    .search-domen {
+        padding: 1rem 0.75rem;
+    }    
+}
+@media (max-width: 540px) {
+    .domain-serch-item {
+        gap: .2rem;
+        &__dname {
+            font-size: var(--font-size-14-22);
+        }
+        &__price {
+            font-size: var(--font-size-14-22);
+        }
+        &__data  {
+            gap: .3rem;
+
+            .available {
+                font-size: var(--font-size-14-22);
+            }
+        }
+    }
+    .search-domen {
+        &__serch {
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            flex-grow: 1;
+        }
+    }
+    
 }
