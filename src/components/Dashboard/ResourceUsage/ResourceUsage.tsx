@@ -65,7 +65,7 @@ export default function ResourceUsage() {
               className="resource-usage__bar-fill"
               style={{
                 width: `${getPercentage(email.used, email.total)}%`,
-                backgroundColor: '#FFAB00',
+                backgroundColor: getStatusColor(getPercentage(email.used, email.total)),
               }}
             />
           </div>

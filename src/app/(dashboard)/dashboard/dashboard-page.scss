@@ -93,6 +93,8 @@
     grid-template-columns: 1fr !important;
 
     .dashboard-page__domains {
+      width: 100%;
+      overflow-x: auto;
       grid-column: span 1 !important;
     }
   }

@@ -26,9 +26,9 @@ export default function DashboardLayout({
 
   return (
     <div className="dashboard-layout">
-      <Sidebar />
-      <main className="dashboard-main">
         <Header />
+      <main className="dashboard-main">
+      <Sidebar />
         <div className="dashboard-content">
           {children}
         </div>

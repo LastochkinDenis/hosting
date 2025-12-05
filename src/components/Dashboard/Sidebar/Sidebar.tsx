@@ -2,6 +2,7 @@
 import './Sidebar.scss';
 import { useAuthStore } from '@/store/authStore';
 import { useUserStore } from '@/store/userStore';
+import { useUIStore } from '@/store/uiStore';
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,47 +20,58 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { logout } = useAuthStore();
   const { first_name, clearUserData } = useUserStore();
-  const [ isShow, setIsShow ] = useState<boolean>(false);
+  const { isSidebarOpen, toggleSidebar } = useUIStore();
 
   useEffect(() => {
     setTimeout(() => {
       document.querySelectorAll('.dashboard-sidebar__item')?.forEach(item => {
-        item.classList.toggle('dashboard-sidebar__item--hide', !isShow);
+        item.classList.toggle('dashboard-sidebar__item--hide', !isSidebarOpen);
       })
-    }, 500)
-  }, [isShow])
+      
+      document.querySelector('.dashboard-sidebar__footer')?.classList.toggle('hide', !isSidebarOpen);
+    }, 200)
+  }, [isSidebarOpen])
 
   return (
-    <aside className={`dashboard-sidebar ${isShow ? '' : 'hide'}`}>
-      <div className="dashboard-sidebar__header">
+    <aside className={`dashboard-sidebar ${isSidebarOpen ? '' : 'hide'}`}>
+      <div className={`dashboard-header__sidebar-header ${isSidebarOpen ? '' : 'hide'} `}>
         <button className='dashboard-sidebar__burger' onClick={() => {
-          setIsShow(prev => !prev);
+          toggleSidebar();
         }}>
           <span></span>
           <span></span>
           <span></span>
         </button>
-        {isShow && <h1 className="dashboard-sidebar__logo">HostPanel</h1>}
-        {!isShow && <h1 className='dashboard-sidebar__logo'>H</h1>}
-      </div>      
-      <nav className="dashboard-sidebar__nav">
-        {menuItems.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`dashboard-sidebar__item ${isActive ? 'dashboard-sidebar__item--active' : ''}`}
-            >
-              <span className="material-symbols-outlined dashboard-sidebar__icon">
-                {item.icon}
-              </span>
-              <p className="dashboard-sidebar__label">{item.label}</p>
-            </Link>
-          );
-        })}
-      </nav>
+        <p className="dashboard-sidebar__logo">HostPanel</p>
+      </div>
+      <div className='dashboard-sidebar__nav--wrapper'>
+        <nav className="dashboard-sidebar__nav">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`dashboard-sidebar__item ${isActive ? 'dashboard-sidebar__item--active' : ''}`}
+              >
+                <span className="material-symbols-outlined dashboard-sidebar__icon">
+                  {item.icon}
+                </span>
+                <p className="dashboard-sidebar__label">{item.label}</p>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
       <div className="dashboard-sidebar__footer">
+        <div className='dashboard-sidebar__footer-btn'>
+          <button className="dashboard-header__icon-button">
+            <span className="material-symbols-outlined">notifications</span>
+          </button>
+          <button className="dashboard-header__icon-button">
+            <span className="material-symbols-outlined">help</span>
+          </button>
+        </div>
         <div className="dashboard-sidebar__user">
           <div
             className="dashboard-sidebar__avatar"
@@ -68,7 +80,7 @@ export default function Sidebar() {
             // }}
           />
           {
-            isShow &&
+            isSidebarOpen &&
             <div className="dashboard-sidebar__user-info">
                 <h2 className="dashboard-sidebar__user-name">{first_name || 'Пользователь'}</h2>
                 <button

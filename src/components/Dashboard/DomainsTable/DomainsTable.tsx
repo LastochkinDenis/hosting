@@ -175,58 +175,60 @@ export default function DomainsTable() {
   
 
   return (
-    <div className="domains-table">
-      <div className="domains-table__header">
-        <h3 className="domains-table__title">Домены</h3>
-        <button className="domains-table__add-button">Добавить домен</button>
-      </div>
-      <div className="domains-table__wrapper">
-        <ConfigProvider >
-          <Table<IDomainTable>
-            columns={columns}
-            dataSource={domains}
-            pagination={{
-              pageSize: sizePage,
-              pageSizeOptions: ['5', '10', '20', '50', '100'],
-              showSizeChanger: true,
-              onShowSizeChange: (current, size) => {
-                setSizePage(size);
-              }
-            }}
-          />
-        </ConfigProvider>
-        {/* <table className="domains-table__table">
-          <thead>
-            <tr>
-              <th className="domains-table__th">Домен</th>
-              <th className="domains-table__th">Статус</th>
-              <th className="domains-table__th">Истекает</th>
-              <th className="domains-table__th domains-table__th--actions">Управление</th>
-            </tr>
-          </thead>
-          <tbody>
-            {domains.map((domain) => (
-              <tr key={domain.id} className="domains-table__row">
-                <td className="domains-table__td domains-table__td--domain">
-                  {domain.name}
-                </td>
-                <td className="domains-table__td">
-                  <span className={`domains-table__status ${getStatusClass(domain.status)}`}>
-                    {domain.status}
-                  </span>
-                </td>
-                <td className="domains-table__td domains-table__td--date">
-                  {domain.expires}
-                </td>
-                <td className="domains-table__td domains-table__td--actions">
-                  <a className="domains-table__link" href="#">
-                    {domain.status === 'Истек' ? 'Продлить' : 'Управлять'}
-                  </a>
-                </td>
+    <div className='domains-table__holder'>
+      <div className="domains-table">
+        <div className="domains-table__header">
+          <h3 className="domains-table__title">Домены</h3>
+          <button className="domains-table__add-button">Добавить домен</button>
+        </div>
+        <div className="domains-table__wrapper">
+          <ConfigProvider >
+            <Table<IDomainTable>
+              columns={columns}
+              dataSource={domains}
+              pagination={{
+                pageSize: sizePage,
+                pageSizeOptions: ['5', '10', '20', '50', '100'],
+                showSizeChanger: true,
+                onShowSizeChange: (current, size) => {
+                  setSizePage(size);
+                }
+              }}
+            />
+          </ConfigProvider>
+          {/* <table className="domains-table__table">
+            <thead>
+              <tr>
+                <th className="domains-table__th">Домен</th>
+                <th className="domains-table__th">Статус</th>
+                <th className="domains-table__th">Истекает</th>
+                <th className="domains-table__th domains-table__th--actions">Управление</th>
               </tr>
-            ))}
-          </tbody>
-        </table> */}
+            </thead>
+            <tbody>
+              {domains.map((domain) => (
+                <tr key={domain.id} className="domains-table__row">
+                  <td className="domains-table__td domains-table__td--domain">
+                    {domain.name}
+                  </td>
+                  <td className="domains-table__td">
+                    <span className={`domains-table__status ${getStatusClass(domain.status)}`}>
+                      {domain.status}
+                    </span>
+                  </td>
+                  <td className="domains-table__td domains-table__td--date">
+                    {domain.expires}
+                  </td>
+                  <td className="domains-table__td domains-table__td--actions">
+                    <a className="domains-table__link" href="#">
+                      {domain.status === 'Истек' ? 'Продлить' : 'Управлять'}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table> */}
+        </div>
       </div>
     </div>
   );

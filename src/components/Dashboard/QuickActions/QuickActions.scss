@@ -71,3 +71,8 @@
     }
   }
 }
+@media (max-width: 768px) {
+  .quick-actions__grid {
+    gap: 0.5rem;
+  }
+}

@@ -1,12 +1,26 @@
 'use client';
 import './Header.scss';
 import { mockDashboardData } from '@/lib/mockApi';
+import { useUIStore } from '@/store/uiStore';
 
 export default function Header() {
   const balance = mockDashboardData.balance;
+  const { isSidebarOpen, toggleSidebar } = useUIStore();
 
   return (
     <header className="dashboard-header">
+      <div className={`dashboard-header__sidebar-header ${isSidebarOpen ? '' : 'hide'}`}>
+        <button className='dashboard-sidebar__burger' onClick={() => {
+          toggleSidebar();
+        }}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        {isSidebarOpen && <p className="dashboard-sidebar__logo">HostPanel</p>}
+        {!isSidebarOpen && <p className='dashboard-sidebar__logo'>H</p>}
+        <p className='dashboard-sidebar__logo dashboard-header__logo-mobile'>H</p>
+      </div>
       <div className="dashboard-header__search">
         <label className="dashboard-header__search-label">
           <div className="dashboard-header__search-wrapper">
@@ -29,13 +43,13 @@ export default function Header() {
           <span className="dashboard-header__balance-value">{balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽</span>
           <button className="dashboard-header__balance-button">Пополнить</button>
         </div>
-        <div className="dashboard-header__divider"></div>
-        <button className="dashboard-header__icon-button">
+        {/* <div className="dashboard-header__divider"></div> */}
+        {/* <button className="dashboard-header__icon-button">
           <span className="material-symbols-outlined">notifications</span>
         </button>
         <button className="dashboard-header__icon-button">
           <span className="material-symbols-outlined">help</span>
-        </button>
+        </button> */}
       </div>
     </header>
   );

@@ -3,6 +3,7 @@
   background: var(--color-card);
   border-radius: 0.75rem;
   border: 1px solid var(--border-primary);
+  width: 100%;
 
   .ant-table-row .ant-table-cell:not(.ant-table-cell-row-hover) {
     background: var(--color-card);
@@ -11,6 +12,11 @@
   .dashboard-header__icon {
     font-size: 18px;
     color: var(--text-color-second);
+  }
+
+  &__holder {
+    width: 100%;
+    overflow-x: auto;
   }
 
   &__settings {
@@ -65,8 +71,14 @@
 
   &__wrapper {
     overflow-x: auto;
-    margin: 0 -1.5rem -1.5rem;
-    padding: 0 1.5rem 1.5rem;
+    // margin: 0 -1.5rem -1.5rem;
+    // padding: 0 1.5rem 1.5rem;
+    width: 100%;
+
+    .ant-table-wrapper {
+      width: 100%;
+      // overflow-x: auto;
+    }
   }
 
   &__table {

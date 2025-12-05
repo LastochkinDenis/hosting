@@ -4,11 +4,19 @@
   width: 16.25rem;
   background: white;
   border-right: 1px solid rgba(148, 163, 184, 0.35);
-  height: 100vh;
+  height: calc(100vh - 4rem);
   position: sticky;
-  transition: width ease-in 0.5s;
-  overflow: hidden;
+  transition: width ease-in 0.5s,
+  transform ease-in 0.5s;
+  overflow: hidden auto;
   top: 0;
+
+  .dashboard-header__sidebar-header {
+    border-right: 1px solid rgba(148, 163, 184, 0.35);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+    height: auto;
+    display: none;
+  }
 
   &__burger {
     display: flex;
@@ -26,16 +34,6 @@
     }
   }
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 1rem 1rem;
-    height: 4rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.35);
-    gap: 0.625rem;
-  }
-
   &__logo {
     font-size: var(--font-size-18-24);
     font-weight: 800;
@@ -48,7 +46,11 @@
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem;
-    flex: 1;
+    // flex: 1;
+
+    &--wrpper {
+      flex-grow: 1;
+    }
   }
 
   &__item {
@@ -98,6 +100,13 @@
   &__footer {
     margin-top: auto;
     padding: 1rem;
+
+    &-btn {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
   }
 
   &__user {
@@ -152,6 +161,13 @@
 
   &.hide {
     width: 5.25rem;
+
+    .dashboard-sidebar__footer.hide {
+      .dashboard-sidebar__footer-btn,
+      .dashboard-sidebar__user {
+        justify-content: center;
+      }
+    }
 
     .dashboard-sidebar__header  {
       justify-content: flex-start;
@@ -221,6 +237,34 @@
     &__item {
       padding: 0.25rem;
     }
-    
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    width: 13rem; 
+    top: 0px;
+    position: fixed;
+    z-index: 11;
+    height: 100vh;
+
+    .dashboard-header__search {
+      margin-bottom: 0.625rem;
+    }
+
+    &__nav {
+      padding: 0;
+    }
+
+    &__nav--wrapper {
+      padding: 0.5rem;
+    }
+
+    .dashboard-header__sidebar-header {
+      display: flex;
+    }
+
+    &.hide {
+      transform: translateX(-13rem);
+    }
   }
 }
