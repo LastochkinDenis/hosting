@@ -6,6 +6,7 @@ import { instance  } from '@/lib/axios_settings';
 import { LOGIN_USER } from '@/lib/api_endpoint';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import { useNotificationStore } from '@/store/notificationStrore';
 
 import { FormEvent, useEffect, useState } from "react";
 import { Form, Input, ConfigProvider } from "antd";
@@ -22,6 +23,7 @@ export default function Login() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const { isAuthenticated, login } = useAuthStore();
+    const { pushNotification } = useNotificationStore();
     
     const onSubmit: FormProps<FieldType>['onFinish'] = (values) => {
         setLoading(true);
@@ -61,8 +63,12 @@ export default function Login() {
             }
         })
         .catch(error => {
+            pushNotification({
+                messeage: 'Ошибка входа',
+                type: 'error'
+            });
+            
             console.error('Ошибка входа:', error);
-            // Можно показать сообщение об ошибке пользователю
         })
         .finally(() => {
             setLoading(false);

@@ -5,6 +5,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from "antd";
 import ru_RU from 'antd/locale/ru_RU'
 import UserAuth from "@/components/UserAuth/UserAuth";
+import NotificationApp from "@/components/NotificationsApp/NotificationsApp";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({
         <UserAuth>
           <ConfigProvider locale={ru_RU}>
             <AntdRegistry>{children}</AntdRegistry>
+            <NotificationApp />
           </ConfigProvider>
         </UserAuth>
       </body>

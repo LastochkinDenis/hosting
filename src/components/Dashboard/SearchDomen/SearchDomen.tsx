@@ -5,10 +5,11 @@ import { instance } from '@/lib/axios_settings';
 import Tabs from '@/Ui/tabs/Tabs';
 import BuyDomain from '@/components/BuyDomain/BuyDomain';
 import { IDomenSearch } from '@/types/domain';
+import { useNotificationStore } from '@/store/notificationStrore';
 
 import { AutoComplete} from 'antd';
-import { AutoCompleteProps, GetRef, notification } from 'antd';
-import React, { useState, useRef, JSX, useEffect } from "react";
+import { AutoCompleteProps, GetRef } from 'antd';
+import React, { useState, useRef, JSX } from "react";
 
 const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
   func: F,
@@ -41,10 +42,9 @@ export default function SearchDomen() {
     const [isShowDomainsList, setIsShowDomainsList] = useState<boolean>(false);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const ref = useRef<autoCompleteRefType | null>(null);
-
-    const [api, contextHolder] = notification.useNotification();
-
-    const renderSerchOption = (dataDomain: Array<IDomenSearch>): AutoCompleteProps['options'] => {
+    const { pushNotification } = useNotificationStore();
+    
+    const renderSerchOption = (): AutoCompleteProps['options'] => {
         return dataDomains.reduce((result, item) => {
             result.push({
                 value: item.dname,
@@ -89,8 +89,14 @@ export default function SearchDomen() {
         
         if(domain === undefined) return
         
-        //Добавить уведомление
-        if(!domain.available) return
+        if(!domain.available) {
+            pushNotification({
+                messeage: 'Домен занят',
+                type: 'error'
+            });
+            
+            return;
+        }
         
         setSelectDomain(domain);
         setIsOpenModal(true);
@@ -171,7 +177,7 @@ export default function SearchDomen() {
             <div className="search-domen__serch">
                 <AutoComplete
                     style={{width: '100%', flexGrow: 1, height: '45px'}}
-                    options={renderSerchOption(dataDomains)}
+                    options={renderSerchOption()}
                     onSearch={onSearch}
                     onSelect={onSelect}
                     showSearch={true}

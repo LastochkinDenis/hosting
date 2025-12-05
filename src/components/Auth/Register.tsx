@@ -6,6 +6,7 @@ import { REGISTER_USER } from "@/lib/api_endpoint";
 import { TypeUser, isTypeUser } from '@/types/user';
 import { instance  } from '@/lib/axios_settings';
 import { useAuthStore } from '@/store/authStore';
+import { useNotificationStore } from '@/store/notificationStrore';
 
 import '@ant-design/v5-patch-for-react-19'; //!!!!! Понизить версю react до 18 !!!!!
 
@@ -31,6 +32,7 @@ export default function Register() {
     const [passwordStrength, setPasswordStrength] = useState<number>(0);
     const router = useRouter();
     const { isAuthenticated, login } = useAuthStore();
+    const { pushNotification } = useNotificationStore();
 
 
     const onInputPassword = (e: React.FormEvent<HTMLInputElement>) => {
@@ -105,7 +107,11 @@ export default function Register() {
         })
         .catch((error) => {
             console.log(error);
-            // ДОДЕЛАТЬ ОБРАБОТЧИК ОШИБОК
+            
+            pushNotification({
+               messeage: 'Ошибка регистраниции',
+               type: 'error'
+            })
         });
     };
     
