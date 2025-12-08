@@ -5,23 +5,45 @@ import { instance } from '@/lib/axios_settings';
 import { GET_USER_DOMAINS } from '@/lib/api_endpoint';
 
 import '@ant-design/v5-patch-for-react-19';
-import { Table, TableProps, ConfigProvider, Input, InputRef } from 'antd';
+import { Table, TableProps, ConfigProvider, Input, InputRef, Popover } from 'antd';
 import type { FilterDropdownProps } from 'antd/es/table/interface';
 import React, { useState, useRef, useEffect } from 'react';
+import { useNotificationStore } from '@/store/notificationStrore';
+import SettingsDomain from './SettingsDomain';
 
 type ColumnsType<T extends object = object> = TableProps<T>['columns'];
 
 const getStatusClass = (status: string) => {
-    if (status === 'Активен') return <span className='domains-table__status item-successful' >{status}</span>;
-    return <span className='domains-table__status item-error'>{status}</span>;
-  };
+    if (status === 'active') return <span className='domains-table__status item-successful' >Активен</span>;
+    return <span className='domains-table__status item-error'>Истек</span>;
+};
 
+const MOCK_DATA:Array<IDomainTable> = [
+  {
+    key: 1,
+    id: 1,
+    domen: 'testq.ru',
+    status: 'active',
+    expires: '2025-12-08',
+    settings: undefined
+  },
+  {
+    key: 2,
+    id: 2,
+    domen: 'test.ru',
+    status: 'inactive',
+    expires: '2025-12-08',
+    settings: undefined
+  }
+]
   
 export default function DomainsTable() {
   const [searchText, setSearchText] = useState<string>('');
   const [sizePage, setSizePage] = useState<number>(5);
   const refSearchInput = useRef<InputRef>(null);
   const [domains, setDomains] = useState<Array<IDomainTable>>([]);
+  const { pushNotification } = useNotificationStore();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     instance.get(GET_USER_DOMAINS)
@@ -32,27 +54,32 @@ export default function DomainsTable() {
       throw Error();
     })
     .then(data => {
-      if(Array.isArray(data)) {
+      if(Array.isArray(data) && data.length > 0) {
         setDomains(data.reduce((result: Array<IDomainTable>, item) => {
-
           if(isIDomain(item)) {
             result.push({
               key: item.id,
+              id: item.id,
               domen: item.name,
-              status: item.status == 'Активен' ? 'Активен' : 'Истек',
+              status: item.status == 'active' ? 'active' : 'inactive',
               expires: item.expires_at,
               settings: undefined
             })
           }
-
           return result;
         }, []));
+      } else {
+        setDomains(MOCK_DATA);
       }
     })
     .catch((e) => {
       console.log(e);
-    })
-  }, [])
+      pushNotification({
+        messeage: 'Произошла ошибка загрузки доменов',
+        type: 'error'
+      });
+    });
+  }, []);
 
   const onClickDNS = (data: IDomainTable) => {
     console.log(data);
@@ -128,8 +155,8 @@ export default function DomainsTable() {
         title: 'Статус',
         dataIndex: 'status',
         filters: [
-          {text: 'Активен', value: 'активен'},
-          {text: 'Истек', value: 'истек'},
+          {text: 'Активен', value: 'active'},
+          {text: 'Истек', value: 'inactive'},
         ],
         filterMultiple: false,
         filterIcon: () => (<span className="material-symbols-outlined dashboard-header__icon">filter_alt</span>),
@@ -155,31 +182,17 @@ export default function DomainsTable() {
         dataIndex: 'settings',
         width: '15%',
         render: (value: unknown, data:IDomainTable) => {
-          return <div className='domains-table__settings'>
-            <button className='domains-table__settings-btn' onClick={() => onClickDNS(data)}>
-              <span className="material-symbols-outlined text-xl">dns</span>
-            </button>
-            <button className="domains-table__settings-btn" onClick={() => onClickAutorenew(data)}>
-              <span className="material-symbols-outlined text-xl">autorenew</span>
-            </button>
-            <button className='domains-table__settings-btn' onClick={() => onClickDelete(data)}>
-              <span className="material-symbols-outlined text-xl">move_item</span>
-            </button>
-            <button className='domains-table__settings-btn' onClick={() => onClickSettings(data)}>
-              <span className="material-symbols-outlined text-xl">more_vert</span>
-            </button>
-          </div>
+          return <SettingsDomain id={data.id} />
         }
       }
     ];
-  
 
   return (
     <div className='domains-table__holder'>
       <div className="domains-table">
         <div className="domains-table__header">
           <h3 className="domains-table__title">Домены</h3>
-          <button className="domains-table__add-button">Добавить домен</button>
+          <button className="domains-table__add-button" onClick={() => setIsOpen(prev => !prev)}>Добавить домен</button>
         </div>
         <div className="domains-table__wrapper">
           <ConfigProvider >

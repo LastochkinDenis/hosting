@@ -7,7 +7,7 @@ export interface IHostingAcount {
 
 export interface IUser {
     id: number;
-    userName: string;
+    user_name: string;
     first_name: string | null;
     last_name: string | null;
     phone: string | null;

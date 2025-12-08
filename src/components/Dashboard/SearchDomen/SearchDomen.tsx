@@ -58,7 +58,7 @@ export default function SearchDomen() {
                 </div>)
             })
             return result;
-        }, [] as Array<seacrhItem>)
+        }, [] as Array<seacrhItem>);
     }
 
     const onSearch = debounce((searchText:string) => {

@@ -51,9 +51,17 @@ function isUpdateFuction<T>(obj: unknown): obj is UpdateFuction<T> {
 
 export function useSearchParamsStore<T>(
     param: string,
+    defaultValue: T,
+    serializer?: StringConstructor): [T, (value: T | UpdateFuction<T>) => void]
+export function useSearchParamsStore<T>(
+    param: string,
     defaultValue?: T,
-    serializer = String,
-    deserializer: (v:string) => T = (v) => v as T ): [T | null, (value: T) => void] {
+    serializer?: StringConstructor): [T | null, (value: T | UpdateFuction<T>) => void] {
+        
+    if(typeof serializer == 'undefined') {
+        serializer = String;
+    }
+
     const [data, setData] = useState<T | null>(typeof defaultValue != 'undefined' ? defaultValue : null);
     const lastestValue = useLatest(data);
 
@@ -70,7 +78,7 @@ export function useSearchParamsStore<T>(
         setData(value);
 
         history.pushState(null, '', window.location.pathname + setSearchParam(window.location.search, param, serializer(newValue)));
-    }, [param, deserializer, lastestValue]);
+    }, [param, lastestValue]);
         
     return [data, onUpdate];
 }

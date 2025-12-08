@@ -21,7 +21,7 @@
 
   &__settings {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     gap: 0.625rem;
 
     &-btn {
@@ -169,6 +169,25 @@
 
     .btn {
       flex-grow: 1;
+    }
+  }
+}
+
+.domains-table__settings-navigation-item {
+  list-style: none;
+  transition: background-color .3s ease-in;
+  
+  a {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+  
+  &:hover {
+    background-color: var(--border-primary);
+    a {
+      color: var(--color-primary);    
     }
   }
 }

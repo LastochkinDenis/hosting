@@ -6,8 +6,9 @@ export interface IDomenSearch {
 
 export interface IDomainTable {
   key: React.Key
+  id: number,
   domen: string,
-  status: 'Активен' | 'Истек',
+  status: 'active' | 'inactive',
   expires: string,
   settings: undefined,
 }
@@ -21,6 +22,19 @@ export interface IDomain {
     auto_renew: true;
     nameservers: Array<string>;
     isp_domain_id: string;
+}
+
+export type record_type = 'A' | 'AAAA' | 'CNAME' | 'MX' | 'NS' | 'TXT' | 'SRV' | 'CAA';
+
+export interface IResourceRecords {
+  id: number,
+  domain_id: number,
+  record_type: record_type,
+  name: string,
+  value: string,
+  ttl: string,
+  priority: number,
+  created_at: string
 }
 
 export function isIDomain(x: unknown): x is IDomain {

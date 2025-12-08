@@ -14,3 +14,5 @@ export const REGISTER_DOMAIN = '/regru/register'
 
 //DOMENS
 export const GET_USER_DOMAINS = '/domains';
+export const GET_DOMAIN_DETAILS: (id: string) => string = (id: string) => `/domains/${id}`;
+export const GET_DOMAIN_DNS: (id: string) => string = (id: string) => `/domains/${id}/dns`;

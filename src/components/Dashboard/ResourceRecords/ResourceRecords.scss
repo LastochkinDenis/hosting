@@ -1,0 +1,41 @@
+.nss-editor {
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    &__content {
+       border-top: 1px solid var(--text-color-third); 
+    }
+
+    &__item {
+        width: 100%;
+        padding: 1.2rem 0 1.2rem 2.25rem;
+        transition: background .3s ease-in,
+        color .3s ease-in;
+        
+        &--add-record {
+            display: flex;
+            gap: 0.625rem;
+            align-items: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: var(--color-primary);
+        }
+
+        &-add-text {
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        &:hover {
+            background-color: var(--border-primary);
+        }
+
+        border-bottom: 1px solid var(--text-color-third);
+    }
+}
