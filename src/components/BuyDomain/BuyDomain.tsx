@@ -4,6 +4,7 @@ import { IDomenSearch } from "@/types/domain";
 import InputWrapper from '@/Ui/Input/InputWrapper'
 import { instance } from '@/lib/axios_settings';
 import { REGISTER_DOMAIN } from '@/lib/api_endpoint';
+import { MODAL_PADDING, MODAL_WIDTH } from '@/lib/styleConst';
 
 import '@ant-design/v5-patch-for-react-19';
 import { Modal, Form, Input, Select, DatePicker, Col, Row, ConfigProvider } from "antd";
@@ -68,8 +69,6 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
 
 
     const onSubmit:FormProps<FieldType>['onFinish'] = (values) => {
-        console.log(values);
-
         instance.post(REGISTER_DOMAIN, {
             domain_name: domain?.dname,
             period: values.registationPeriod,
@@ -110,7 +109,12 @@ export default function BuyDomain({ isOpen, domain, callbackSetIsOpen }: IProps)
             onCancel={() => callbackSetIsOpen(false)}
             closable={false}
             footer={null}
-            width={'62.5rem'}
+            width={MODAL_WIDTH}
+            styles={{
+                content: {
+                    padding: MODAL_PADDING
+                }
+            }}
         >   
             <div className='buy-domain__top'>
                 <p className='h4'>Регистрация домена</p>

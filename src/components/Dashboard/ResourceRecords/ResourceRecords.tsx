@@ -2,17 +2,18 @@
 import './ResourceRecords.scss';
 import { instance } from "@/lib/axios_settings";
 import { GET_DOMAIN_DNS } from "@/lib/api_endpoint";
-import { IResourceRecords, type record_type } from '@/types/domain';
+import { IResourceRecords, recordType } from '@/types/domain';
 import ResourceRecordItem from '@/components/Dashboard/ResourceRecords/ResourceRecordItem';
-
+import ModalRecord from './ModalRecord/ModalRecord';
 
 import { useState, useEffect } from "react";
 
 export default function ResourceRecords({ id } : {id : string}) {
-
     const [resourceRecords, setResourceRecords] = useState<Array<IResourceRecords>>([]);
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
-    useEffect(() => {
+    const getResourceRecords = () => {
         instance.get(GET_DOMAIN_DNS(id))
         .then(response => {
             if(response.status != 200) {
@@ -21,34 +22,46 @@ export default function ResourceRecords({ id } : {id : string}) {
             return response.data
         })
         .then(data => {
-            console.log(data)
+            setResourceRecords(data);
         })
+    }
+
+    useEffect(() => {
+        getResourceRecords();
     }, []);
+    
 
     const handleRecordsClear = () => {
 
     }
 
     const handleRecordsAdd = () => {
-
+        setModalOpen(true);
     }
 
-    return <div className="nss-editor">
-        <div className="nss-editor__header">
-            <p className="nss-editor__title h2">Ресурсные записи</p>
-            <button className="btn" onClick={handleRecordsClear}>
-                <span className="material-symbols-outlined">delete</span>
-                Очистить зону
-            </button>
+    return <>
+        <div className="nss-editor">
+            <div className="nss-editor__header">
+                <p className="nss-editor__title h2">Ресурсные записи</p>
+                <button className="btn" onClick={handleRecordsClear}>
+                    <span className="material-symbols-outlined">delete</span>
+                    Очистить зону
+                </button>
+            </div>
+            <div className="nss-editor__content">
+                <button onClick={handleRecordsAdd} className="nss-editor__item nss-editor__item--add-record">
+                    <span className="material-symbols-outlined">add</span>
+                    <span className='nss-editor__item-add-text'>Добавить запись</span>
+                </button>
+                {resourceRecords.map((item) => {
+                    return <ResourceRecordItem key={item.id} resourceRecords={item}  />
+                })}
+            </div>
         </div>
-        <div className="nss-editor__content">
-            <button onClick={handleRecordsAdd} className="nss-editor__item nss-editor__item--add-record">
-                <span className="material-symbols-outlined">add</span>
-                <span className='nss-editor__item-add-text'>Добавить запись</span>
-            </button>
-            {resourceRecords.map((item) => {
-                return <ResourceRecordItem resourceRecords={item}  />
-            })}
-        </div>
-    </div>
+        {
+            modalOpen && <ModalRecord 
+            setIsOpen={(v) => setModalOpen(v)}
+            updateRecords={() => getResourceRecords()} />
+        }
+    </>
 }

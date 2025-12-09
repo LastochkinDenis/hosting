@@ -11,7 +11,7 @@ export default function Page() {
     const [domainName, setDomainName] = useState<string>('');
 
     useEffect(() => {
-        instance.get(GET_DOMAIN_DETAILS(id?.toString()!))
+        instance.get(GET_DOMAIN_DETAILS(id?.toString() ?? ''))
         .then(response => {
             if(response.status != 200) {
                 throw Error();
@@ -29,7 +29,7 @@ export default function Page() {
     })
   
     return <>
-        <h1 className="dashboard-page__title h1">Измение NSS записей у домена {domainName}</h1>
-        <ResourceRecords id={id?.toString()!} />
+        <h1 className="dashboard-page__title h1">Измение ресурсные записей у домена {domainName}</h1>
+        <ResourceRecords id={id?.toString() ?? ''} />
     </>
 }

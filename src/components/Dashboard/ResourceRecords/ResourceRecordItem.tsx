@@ -1,11 +1,11 @@
 'use client';
 
 import './ResourceRecords.scss';
-import { IResourceRecords, type record_type } from '@/types/domain';
+import { IResourceRecords, recordType } from '@/types/domain';
 
 import { memo } from 'react';
 
-const ResourceRecordItem = memo(({ resourceRecords } : { resourceRecords: IResourceRecords }) => {
+export default memo(function ResourceRecordItem({ resourceRecords } : { resourceRecords: IResourceRecords }) {
 
     const handleEdir = () => {
 
@@ -15,7 +15,7 @@ const ResourceRecordItem = memo(({ resourceRecords } : { resourceRecords: IResou
 
     }
 
-    return <div className='nss-editor__item' key={resourceRecords.id}>
+    return <div className='nss-editor__item'>
         <div className="nss-editor__item-value" onClick={handleEdir}>
             <span className='nss-editor__item-record-type'>{resourceRecords.record_type}</span>
             <span className='nss-editor__item-name'>{resourceRecords.name}</span>
@@ -30,6 +30,4 @@ const ResourceRecordItem = memo(({ resourceRecords } : { resourceRecords: IResou
             </button>
         </div>
     </div>
-})
-
-export default ResourceRecordItem;
+});

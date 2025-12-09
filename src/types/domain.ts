@@ -24,12 +24,21 @@ export interface IDomain {
     isp_domain_id: string;
 }
 
-export type record_type = 'A' | 'AAAA' | 'CNAME' | 'MX' | 'NS' | 'TXT' | 'SRV' | 'CAA';
+export enum recordType {
+  A = 'A',
+  AAAA = 'AAAA',
+  CNAME = 'CNAME',
+  MX = 'MX',
+  NS = 'NS',
+  TXT = 'TXT',
+  SRV = 'SRV',
+  CAA = 'CAA'
+}
 
 export interface IResourceRecords {
   id: number,
   domain_id: number,
-  record_type: record_type,
+  record_type: recordType,
   name: string,
   value: string,
   ttl: string,

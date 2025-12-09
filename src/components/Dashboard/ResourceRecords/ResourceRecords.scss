@@ -39,3 +39,42 @@
         border-bottom: 1px solid var(--text-color-third);
     }
 }
+.modal-record {
+
+    &__title {
+        margin-bottom: 0.625rem;
+    }
+
+    &__choose-type {
+        display: flex;
+        flex-direction: column;
+
+        input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            visibility: 0;
+        }
+
+        &-item {
+            padding: 0.625rem;
+            border-bottom: 1px solid var(--text-color-third);
+            transition: background-color .3s ease-in;
+            cursor: pointer;
+            position: relative;
+            display: block;
+
+            &--wrapper:first-child {
+                border-top: 1px solid var(--text-color-third);
+            }
+        }
+
+        &-item:hover,
+        &-item--wrapper input:checked + &-item {
+            background-color: var(--border-primary);
+        }
+    }
+}
