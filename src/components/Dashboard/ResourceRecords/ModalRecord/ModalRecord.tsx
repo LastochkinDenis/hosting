@@ -3,7 +3,7 @@ import { recordType, IResourceRecords } from "@/types/domain"
 import { MODAL_PADDING, MODAL_WIDTH } from "@/lib/styleConst";
 import '../ResourceRecords.scss';
 
-import { Modal, Form, Input, ConfigProvider } from "antd"
+import { Modal, Form, Input, Select } from "antd"
 import type { FormProps } from "antd";
 import { Rule } from 'antd/es/form';
 import { useState, useEffect } from "react";
@@ -84,9 +84,9 @@ type fieldsByRecordType = {
     [recordType.CAA]: IFieldCAA,
 }
 
-type fieldsByRecord<Type> = {
+type fieldsRecord<Type> = {
     [P in keyof Type]: {
-        name: string,
+        keyField: P,
         title: string;
         typeField: 'text' | [number, number] | Array<string> | 'number';
         rules?: Array<Rule>;
@@ -94,12 +94,13 @@ type fieldsByRecord<Type> = {
     }
 }
 
-type FormField = Record<recordType, fieldsByRecord<fieldsByRecordType[keyof fieldsByRecordType]>>
+type FormField = Record<recordType, fieldsRecord<fieldsByRecordType[keyof fieldsByRecordType]>>
 
+// Шаблон формы для каждой ресусной записи
 const fieldsByRecord: FormField = {
     [recordType.A] : {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -107,7 +108,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'iPAddress': {
-            name: 'iPAddress',
+            keyField: 'iPAddress',
             title: 'IP Address',
             typeField: 'text',
             rules: [
@@ -115,14 +116,14 @@ const fieldsByRecord: FormField = {
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     }, 
     [recordType.AAAA]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -130,7 +131,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'iPv6Address': {
-            name: 'iPv6Address',
+            keyField: 'iPv6Address',
             title: 'IPv6Address',
             typeField: 'text',
             rules: [
@@ -138,14 +139,14 @@ const fieldsByRecord: FormField = {
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     },
     [recordType.CNAME]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -153,7 +154,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'canonicalName': {
-            name: 'canonicalName',
+            keyField: 'canonicalName',
             title: 'Canonical Name',
             typeField: 'text',
             rules: [
@@ -161,14 +162,14 @@ const fieldsByRecord: FormField = {
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         }
     },
     [recordType.MX]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -176,7 +177,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'mailServer': {
-            name: 'mailServer',
+            keyField: 'mailServer',
             title: 'Mail server',
             typeField: 'text',
             rules: [
@@ -184,23 +185,23 @@ const fieldsByRecord: FormField = {
             ]
         },
         'priority': {
-            name: 'priority',
+            keyField: 'priority',
             title: 'Priority',
-            typeField: [0, 20],
-            defaultValue: 0,
+            typeField: [1, 21],
+            defaultValue: 1,
             rules: [
                 {required: true, message: 'Необходимо выбрать priority'}
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     },
     [recordType.NS]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -208,7 +209,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'dnsServer': {
-            name: 'dnsServer',
+            keyField: 'dnsServer',
             title: 'Dns server',
             typeField: 'text',
             rules: [
@@ -216,7 +217,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'priority': {
-            name: 'priority',
+            keyField: 'priority',
             title: 'Priority',
             typeField: 'text',
             rules: [
@@ -224,14 +225,14 @@ const fieldsByRecord: FormField = {
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     },
     [recordType.TXT]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -239,7 +240,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'text': {
-            name: 'text',
+            keyField: 'text',
             title: 'Text',
             typeField: 'text',
             rules: [
@@ -247,14 +248,14 @@ const fieldsByRecord: FormField = {
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     },
     [recordType.SRV]: {
         'service': {
-            name: 'service',
+            keyField: 'service',
             title: 'Service',
             typeField: 'text',
             rules: [
@@ -262,7 +263,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'priority': {
-            name: 'priority',
+            keyField: 'priority',
             title: 'Priority',
             typeField: 'number',
             rules: [
@@ -273,7 +274,7 @@ const fieldsByRecord: FormField = {
             defaultValue: 0,
         },
         'weight': {
-            name: 'weight',
+            keyField: 'weight',
             title: 'Weight',
             typeField: 'number',
             rules: [
@@ -284,7 +285,7 @@ const fieldsByRecord: FormField = {
             defaultValue: 0,
         },
         'port': {
-            name: 'port',
+            keyField: 'port',
             title: 'Port',
             typeField: 'number',
             rules: [
@@ -295,14 +296,14 @@ const fieldsByRecord: FormField = {
             defaultValue: 0,
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         }
     },
     [recordType.CAA]: {
         'subdomain': {
-            name: 'subdomain',
+            keyField: 'subdomain',
             title: 'Subdomain',
             typeField: 'text',
             rules: [
@@ -310,7 +311,7 @@ const fieldsByRecord: FormField = {
             ]
         },
         'flag': {
-            name: 'flag',
+            keyField: 'flag',
             title: 'Flag',
             typeField: ['0', '128'],
             rules: [
@@ -319,7 +320,7 @@ const fieldsByRecord: FormField = {
             defaultValue: '0'
         },
         'tag': {
-            name: 'tag',
+            keyField: 'tag',
             title: 'Tag',
             typeField: ['issue', 'issuewild', 'iodef'],
             rules: [
@@ -328,26 +329,26 @@ const fieldsByRecord: FormField = {
             defaultValue: 'issue'
         },
         'value': {
-            name: 'value',
-            title: 'value',
+            keyField: 'value',
+            title: 'Value',
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести value'}
             ]
         },
         'type': {
-            name: '',
+            keyField: 'type',
             title: '',
             typeField: 'text'
         } 
     },
-}
+};
 
 export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
     const [tRecord, setTRecord] = useState<recordType | undefined>(type);
 
     const renderChoosetRecord = () => {
-        if(typeof tRecord !== 'undefined') return undefined
+        if(typeof tRecord !== 'undefined') return undefined;
 
         return <div className="modal-record__choose-type">
             {
@@ -367,13 +368,26 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
         
     }
 
-    useEffect(() => {
-        if(typeof tRecord != 'undefined') {
-            Object.entries(fieldsByRecord[tRecord]).map(item => {
-                const [key, obj] = item;
-            })
+    const renderSelect = (values: [number, number] | Array<string>, id: string) => {
+
+        let option = [];
+
+        if(typeof values[0] == 'number' && typeof values[1] == 'number') {
+            for(let i = values[0]; i < values[1]; i++) {
+                option.push({value: i, label: i});
+            }
         }
-    }, [tRecord]);
+        else {
+            option = values.map(item => ({
+                value: item,
+                label: item
+            }));
+        }
+
+        return <Select
+            options={option}
+        />;
+    }
 
     return <Modal
     footer={null}
@@ -402,10 +416,20 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
                 {
                    Object.entries(fieldsByRecord[tRecord]).map(item => {
                     const [key, field] = item;
-                    return <InputWrapper key={key} label={field.title} id={`modal-record-${field.name}`}>
+
+                    if(key == 'type') {
+                        return null;
+                    }
+                    return <InputWrapper key={key} label={field.title} labelId={`modal-record-${field.keyField}`}>
                         <Form.Item<FieldType>
+                            name={field.keyField}
+                            rules={field.rule}
+                            initialValue={field.defaultValue}
                             >
-                                
+                            {Array.isArray(field.typeField) && renderSelect(field.typeField, `modal-record-${field.keyField}`)}
+                            {!Array.isArray(field.typeField) && 
+                                <Input type={field.typeField} placeholder={field.title} id={`modal-record-${field.keyField}`} />
+                            }
                         </Form.Item>               
                     </InputWrapper>
                    })
