@@ -5,6 +5,7 @@ import '../ResourceRecords.scss';
 
 import { Modal, Form, Input, ConfigProvider } from "antd"
 import type { FormProps } from "antd";
+import { Rule } from 'antd/es/form';
 import { useState, useEffect } from "react";
 import InputWrapper from "@/Ui/Input/InputWrapper";
 
@@ -24,178 +25,321 @@ interface IFieldBase {
 }
 
 interface IFieldA extends IFieldBase, IFieldRecordType {
-    iPAddress?: string;
+    iPAddress: string;
     type: recordType.A;
 };
 
 interface IFieldAAAA extends IFieldBase, IFieldRecordType  {
-    iPv6Address?: string;
+    iPv6Address: string;
     type: recordType.AAAA;
 };
 
 interface IFieldCname extends IFieldBase, IFieldRecordType {
-    canonicalName?: string;
+    canonicalName: string;
     type: recordType.CNAME;
 };
 
 interface IFieldTXT extends IFieldBase, IFieldRecordType {
-    text?: string;
+    text: string;
     type: recordType.TXT;
 }
 
 interface IFieldMX extends IFieldBase, IFieldRecordType {
-    priority?: number;
-    mailServer?: string;
+    priority: number;
+    mailServer: string;
     type: recordType.MX;
 }
 
 interface IFieldNS extends IFieldBase, IFieldRecordType {
-    dnsServer?: string;
-    priority?: number;
+    dnsServer: string;
+    priority: number;
     type: recordType.NS;
 }
 
-type FieldType = IFieldA | IFieldAAAA | IFieldCname | IFieldTXT | IFieldMX | IFieldNS;
+interface IFieldSRV extends IFieldRecordType {
+    service: string;
+    priority: number;
+    weight: number;
+    port: number;
+    type: recordType.SRV;
+}
 
-/*
-    a {
-        Subdomain, IP Address
+interface IFieldCAA extends IFieldRecordType, IFieldBase {
+    flag: string;
+    tag: string;
+    value: string;
+    type: recordType.CAA;
+}
 
-        request {
-            "record_type": "A",
-            "name": "subdomain.kostr.ru",
-            "value": "192.168.1.200",
-            "ttl": 3600
-        }
-    },
-    aaaa {
-        Subdomain, IPv6 Address
+type FieldType = IFieldA | IFieldAAAA | IFieldCname | IFieldTXT | IFieldMX | IFieldNS | IFieldSRV | IFieldCAA;
 
-        request {
-            "record_type": "AAAA",
-            "name": "kostr.ru",
-            "value": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-            "ttl": 3600
-        }
-    },
-    CNAME {
-        Subdomain, Canonical name
+type fieldsByRecordType = {
+    [recordType.A]: IFieldA,
+    [recordType.AAAA]: IFieldAAAA,
+    [recordType.CNAME]: IFieldCname,
+    [recordType.TXT]: IFieldTXT,
+    [recordType.MX]: IFieldMX,
+    [recordType.NS]: IFieldNS,
+    [recordType.SRV]: IFieldSRV,
+    [recordType.CAA]: IFieldCAA,
+}
 
-
-        request {
-            "record_type": "CNAME",
-            "name": "mail.kostr.ru",
-            "value": "kostr.ru",
-            "ttl": 3600
-        }
-    },
-    MX {
-        Subdomain,
-        Priority(Select)[0-20],
-        Mail Server
-
-
-        request {
-            "record_type": "MX",
-            "name": "kostr.ru",
-            "value": "mail.kostr.ru",
-            "ttl": 3600,
-            "priority": 10
-        }
-    },
-    NS {
-        Subdomain,
-        DNS Server,
-        Priority(number)
-
-        request {
-            "record_type": "NS",
-            "name": "subdomain.kostr.ru",
-            "value": "ns1.example.com",
-            "ttl": 3600
-        }
-    },
-    TXT {
-        Subdomain,
-        Text
-
-        request {
-            "record_type": "TXT",
-            "name": "kostr.ru",
-            "value": "v=spf1 include:_spf.google.com ~all",
-            "ttl": 3600
-        }
-    },
-    SRV {
-        Service,
-        Priority(number) Weight(number) Port(number)
-        Target
+type fieldsByRecord<Type> = {
+    [P in keyof Type]: {
+        name: string,
+        title: string;
+        typeField: 'text' | [number, number] | Array<string> | 'number';
+        rules?: Array<Rule>;
+        defaultValue?: string | number
     }
-    CAA {
-        Subdomain
-        Flag(Select)[0 128] Tag(Select)()[issue, issuewild, iodef]
-        Value
-    }
+}
 
-    уникалные mx, ns, srv, caa
-    не уникльные a, aaaa, cname, txt
-*/
+type FormField = Record<recordType, fieldsByRecord<fieldsByRecordType[keyof fieldsByRecordType]>>
 
-const filedsByRecordType: Record<recordType, Record<string, {value: string, input: 'text' | [number, number] | Array<string>}>> = {
+const fieldsByRecord: FormField = {
     [recordType.A] : {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
-        'ip-address': {
-            value: 'IPAddress',
-            input: 'text',
-        }
+        'iPAddress': {
+            name: 'iPAddress',
+            title: 'IP Address',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести ip address'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     }, 
     [recordType.AAAA]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
-        'ipv6-address': {
-            value: 'iPv6Address',
-            input: 'text'
-        }
+        'iPv6Address': {
+            name: 'iPv6Address',
+            title: 'IPv6Address',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести ipv6 address'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     },
     [recordType.CNAME]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
-        'canonical-name': {
-            value: 'canonicalName',
-            input: 'text'
+        'canonicalName': {
+            name: 'canonicalName',
+            title: 'Canonical Name',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести canonical name'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
         }
     },
     [recordType.MX]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
+        'mailServer': {
+            name: 'mailServer',
+            title: 'Mail server',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести mail server'}
+            ]
+        },
+        'priority': {
+            name: 'priority',
+            title: 'Priority',
+            typeField: [0, 20],
+            defaultValue: 0,
+            rules: [
+                {required: true, message: 'Необходимо выбрать priority'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     },
     [recordType.NS]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
+        'dnsServer': {
+            name: 'dnsServer',
+            title: 'Dns server',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести dns server'}
+            ]
+        },
+        'priority': {
+            name: 'priority',
+            title: 'Priority',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести priority'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     },
     [recordType.TXT]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
+        'text': {
+            name: 'text',
+            title: 'Text',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести text'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     },
-    [recordType.SRV]: {},
+    [recordType.SRV]: {
+        'service': {
+            name: 'service',
+            title: 'Service',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести service'}
+            ]
+        },
+        'priority': {
+            name: 'priority',
+            title: 'Priority',
+            typeField: 'number',
+            rules: [
+                {pattern: /\d+/, message: 'Priority должен быть числом'},
+                {required: true, message: 'Необходимо ввести priority'},
+                {min: 0, message: 'Priority не должно быть меньше 0'}
+            ],
+            defaultValue: 0,
+        },
+        'weight': {
+            name: 'weight',
+            title: 'Weight',
+            typeField: 'number',
+            rules: [
+                {pattern: /\d+/, message: 'Weight должен быть числом'},
+                {required: true, message: 'Необходимо ввести weight'},
+                {min: 0, message: 'Weight не должно быть меньше 0'}
+            ],
+            defaultValue: 0,
+        },
+        'port': {
+            name: 'port',
+            title: 'Port',
+            typeField: 'number',
+            rules: [
+                {pattern: /\d+/, message: 'Port должен быть числом'},
+                {required: true, message: 'Необходимо ввести port'},
+                {min: 0, message: 'Port не должно быть меньше 0'}
+            ],
+            defaultValue: 0,
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        }
+    },
     [recordType.CAA]: {
         'subdomain': {
-            value: 'subdomain',
-            input: 'text'
+            name: 'subdomain',
+            title: 'Subdomain',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести subdomain'}
+            ]
         },
+        'flag': {
+            name: 'flag',
+            title: 'Flag',
+            typeField: ['0', '128'],
+            rules: [
+                {required: true, message: 'Необходимо выбрать flag'}
+            ],
+            defaultValue: '0'
+        },
+        'tag': {
+            name: 'tag',
+            title: 'Tag',
+            typeField: ['issue', 'issuewild', 'iodef'],
+            rules: [
+                {required: true, message: 'Необходимо выбрать tag'}
+            ],
+            defaultValue: 'issue'
+        },
+        'value': {
+            name: 'value',
+            title: 'value',
+            typeField: 'text',
+            rules: [
+                {required: true, message: 'Необходимо ввести value'}
+            ]
+        },
+        'type': {
+            name: '',
+            title: '',
+            typeField: 'text'
+        } 
     },
 }
 
@@ -223,6 +367,14 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
         
     }
 
+    useEffect(() => {
+        if(typeof tRecord != 'undefined') {
+            Object.entries(fieldsByRecord[tRecord]).map(item => {
+                const [key, obj] = item;
+            })
+        }
+    }, [tRecord]);
+
     return <Modal
     footer={null}
     width={MODAL_WIDTH}
@@ -248,22 +400,15 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
                     <Input />
                 </Form.Item>
                 {
-                    'subdomain' in filedsByRecordType[tRecord] &&
-                    <InputWrapper label={filedsByRecordType[tRecord].subdomain.toString()} labelId="modal-record-subdomain">
+                   Object.entries(fieldsByRecord[tRecord]).map(item => {
+                    const [key, field] = item;
+                    return <InputWrapper key={key} label={field.title} id={`modal-record-${field.name}`}>
                         <Form.Item<FieldType>
-                            name="subdomain"
-                            rules={[
-                                {required: true, message: 'Необходимо ввести subdomain'}
-                            ]}
                             >
-                                <Input id="modal-record-subdomain" placeholder="Subdomain" type="text" />
-                        </Form.Item>
+                                
+                        </Form.Item>               
                     </InputWrapper>
-                }
-                {   [recordType.A, recordType.AAAA, recordType.CNAME, recordType.TXT].some(item => tRecord) &&
-                    <InputWrapper >
-                    
-                    </InputWrapper>
+                   })
                 }
             </Form>
         }

@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 export default function ResourceRecords({ id } : {id : string}) {
     const [resourceRecords, setResourceRecords] = useState<Array<IResourceRecords>>([]);
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+    const [tRecord, setTRecord] = useState<recordType | undefined>();
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
     const getResourceRecords = () => {
