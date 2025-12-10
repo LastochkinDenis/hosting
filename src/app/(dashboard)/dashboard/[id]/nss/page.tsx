@@ -4,11 +4,14 @@ import { GET_DOMAIN_DETAILS } from '@/lib/api_endpoint';
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import ResourceRecords from "@/components/Dashboard/ResourceRecords/ResourceRecords";
+import { AxiosError, isAxiosError } from "axios";
 
 export default function Page() {
     const { id } = useParams();
     const [domainName, setDomainName] = useState<string>('');
+    const router = useRouter();
 
     useEffect(() => {
         instance.get(GET_DOMAIN_DETAILS(id?.toString() ?? ''))
@@ -23,8 +26,9 @@ export default function Page() {
                 setDomainName(data.name);
             }
         })
-        .catch(e => {
+        .catch((e) => {
             console.error(e);
+            router.push('/dashboard/');
         })
     })
   
