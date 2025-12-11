@@ -11,7 +11,7 @@ export default function SettingsDomain({id} : {id: number}) {
     return <div className="domains-table__settings">
         <Popover content={<ul className='domains-table__settings-navigation'>
                 <li className='domains-table__settings-navigation-item'>
-                    <a href={`/dashboard/${id}/nss`}><span className="material-symbols-outlined text-xl">dns</span> 
+                    <a href={`/dashboard/${id}/dns`}><span className="material-symbols-outlined text-xl">dns</span> 
                     DNS-записи</a>
                 </li>
             </ul>}

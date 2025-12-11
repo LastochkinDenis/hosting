@@ -42,7 +42,7 @@
 .modal-record {
 
     &__title {
-        margin-bottom: 0.625rem;
+        margin-bottom: 1rem;
     }
 
     &__choose-type {
@@ -75,6 +75,12 @@
         &-item:hover,
         &-item--wrapper input:checked + &-item {
             background-color: var(--border-primary);
+        }
+    }
+
+    &__footer {
+        .btn {
+            margin-left: auto;
         }
     }
 }

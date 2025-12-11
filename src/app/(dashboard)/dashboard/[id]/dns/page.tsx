@@ -3,10 +3,12 @@ import { instance } from "@/lib/axios_settings";
 import { GET_DOMAIN_DETAILS } from '@/lib/api_endpoint';
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { useRouter } from "next/navigation";
 import ResourceRecords from "@/components/Dashboard/ResourceRecords/ResourceRecords";
 import { AxiosError, isAxiosError } from "axios";
+
+export const DomenContext = createContext({domen: '', id: ''});
 
 export default function Page() {
     const { id } = useParams();
@@ -34,6 +36,8 @@ export default function Page() {
   
     return <>
         <h1 className="dashboard-page__title h1">Измение ресурсные записей у домена {domainName}</h1>
-        <ResourceRecords id={id?.toString() ?? ''} />
+        <DomenContext value={{domen: domainName, id: id?.toString() ?? ''}}>
+            <ResourceRecords id={id?.toString() ?? ''} />
+        </DomenContext>
     </>
 }

@@ -1,19 +1,24 @@
 'use client'
 import { recordType, IResourceRecords } from "@/types/domain"
 import { MODAL_PADDING, MODAL_WIDTH } from "@/lib/styleConst";
+import InputWrapper from "@/Ui/Input/InputWrapper";
+import { instance } from "@/lib/axios_settings";
+import { DomenContext } from "@/app/(dashboard)/dashboard/[id]/dns/page";
+import { CREATE_DNS_RECORD, UPDATE_DNS_RECORD } from '@/lib/api_endpoint'
+import { useNotificationStore } from '@/store/notificationStrore'
 import '../ResourceRecords.scss';
 
 import { Modal, Form, Input, Select } from "antd"
 import type { FormProps } from "antd";
 import { Rule } from 'antd/es/form';
-import { useState, useEffect } from "react";
-import InputWrapper from "@/Ui/Input/InputWrapper";
+import { useState, useContext } from "react";
 
 interface IProps {
     setIsOpen: (v: boolean) => void;
     updateRecords: () => void;
+    idRecord?: string;
     type?: recordType;
-    resource?: IResourceRecords;
+    dataRecord?: IDataFieldServer
 }
 
 interface IFieldRecordType {
@@ -22,6 +27,10 @@ interface IFieldRecordType {
 
 interface IFieldBase {
     subdomain: string;
+}
+
+interface IDataFieldServer {
+    [key: string]: string
 }
 
 interface IFieldA extends IFieldBase, IFieldRecordType {
@@ -90,7 +99,8 @@ type fieldsRecord<Type> = {
         title: string;
         typeField: 'text' | [number, number] | Array<string> | 'number';
         rules?: Array<Rule>;
-        defaultValue?: string | number
+        defaultValue?: string | number;
+        dataServer?: string;
     }
 }
 
@@ -105,15 +115,18 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name'
         },
         'iPAddress': {
             keyField: 'iPAddress',
             title: 'IP Address',
             typeField: 'text',
             rules: [
-                {required: true, message: 'Необходимо ввести ip address'}
-            ]
+                {required: true, message: 'Необходимо ввести ip address'},
+                {pattern: /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/, message: "Некоректный ip address"}
+            ],
+            dataServer: 'value'
         },
         'type': {
             keyField: 'type',
@@ -128,7 +141,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name'
         },
         'iPv6Address': {
             keyField: 'iPv6Address',
@@ -136,7 +150,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести ipv6 address'}
-            ]
+            ],
+            dataServer: 'value'
         },
         'type': {
             keyField: 'type',
@@ -151,7 +166,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name',
         },
         'canonicalName': {
             keyField: 'canonicalName',
@@ -159,7 +175,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести canonical name'}
-            ]
+            ],
+            dataServer: 'value',
         },
         'type': {
             keyField: 'type',
@@ -174,7 +191,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name',
         },
         'mailServer': {
             keyField: 'mailServer',
@@ -182,7 +200,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести mail server'}
-            ]
+            ],
+            dataServer: 'value',
         },
         'priority': {
             keyField: 'priority',
@@ -191,7 +210,8 @@ const fieldsByRecord: FormField = {
             defaultValue: 1,
             rules: [
                 {required: true, message: 'Необходимо выбрать priority'}
-            ]
+            ],
+            dataServer: 'priority',
         },
         'type': {
             keyField: 'type',
@@ -206,7 +226,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name',
         },
         'dnsServer': {
             keyField: 'dnsServer',
@@ -214,7 +235,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести dns server'}
-            ]
+            ],
+            dataServer: 'value',
         },
         'priority': {
             keyField: 'priority',
@@ -222,7 +244,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести priority'}
-            ]
+            ],
+            dataServer: 'priority',
         },
         'type': {
             keyField: 'type',
@@ -237,7 +260,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести subdomain'}
-            ]
+            ],
+            dataServer: 'name',
         },
         'text': {
             keyField: 'text',
@@ -245,7 +269,8 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести text'}
-            ]
+            ],
+            dataServer: 'value',
         },
         'type': {
             keyField: 'type',
@@ -260,7 +285,7 @@ const fieldsByRecord: FormField = {
             typeField: 'text',
             rules: [
                 {required: true, message: 'Необходимо ввести service'}
-            ]
+            ],
         },
         'priority': {
             keyField: 'priority',
@@ -344,17 +369,20 @@ const fieldsByRecord: FormField = {
     },
 };
 
-export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
-    const [tRecord, setTRecord] = useState<recordType | undefined>(type);
+export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, dataRecord}: IProps ) {
+    const [recordT, setRecordT] = useState<recordType | undefined>(type);
+    const [isLoad, setIsload] = useState<boolean>(false);
+    const {domen, id} = useContext(DomenContext);
+    const { pushNotification } = useNotificationStore()
 
-    const renderChoosetRecord = () => {
-        if(typeof tRecord !== 'undefined') return undefined;
+    const renderChooseRecordT = () => {
+        if(typeof recordT !== 'undefined') return undefined;
 
         return <div className="modal-record__choose-type">
             {
                 Object.values(recordType).map(record => {
                     return (<div key={record} className="modal-record__choose-type-item--wrapper">
-                            <input type="radio"  name="record-type" id={`record-${record}`} onChange={() => {setTRecord(record)}}  />
+                            <input type="radio"  name="record-type" id={`record-${record}`} onChange={() => {setRecordT(record)}}  />
                             <label htmlFor={`record-${record}`} className="modal-record__choose-type-item">
                         <span className="modal-record__choose-type-item-text">{record}</span>
                     </label>
@@ -364,8 +392,100 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
         </div>
     }
 
-    const onFinish:FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish:FormProps<FieldType>['onFinish'] = async (values) => {
+
+        let name: string = '';
+        let value: string = '';
+        let priority: null | number = null;
+
+        switch(recordT) {
+            case(recordType.A):
+                values = values as IFieldA;
+
+                name = values.subdomain + '.' + domen;
+                value = values.iPAddress;
+
+                break;
+            case(recordType.AAAA):
+                values = values as IFieldAAAA;
+
+                name = values.subdomain + '.' + domen;
+                value = values.iPv6Address;
+
+                break;
+            case(recordType.CAA):
+                values = values as IFieldCAA;
+                
+                break;
+            case(recordType.CNAME):
+                values = values as IFieldCname;
+
+                name = values.subdomain + '.' + domen;
+                value = values.canonicalName;
+
+                break;
+            case(recordType.MX):
+                values = values as IFieldMX;
+
+                name = values.subdomain + '.' + domen;
+                value = values.mailServer;
+                priority = values.priority
+
+                break;
+            case(recordType.NS):
+                values = values as IFieldNS;
+
+                name = values.subdomain + '.' + domen;
+                value = values.dnsServer;
+                priority = values.priority;
+
+                break;
+            case(recordType.SRV):
+                values = values as IFieldSRV;
+                break;
+            case(recordType.TXT):
+                values = values as IFieldTXT;
+
+                name = values.subdomain + '.' + domen;
+                value = values.text;
+
+                break;
+        }
         
+        setIsload(true);
+
+        const handleDnsChange = typeof idRecord == 'undefined' ? instance.post(CREATE_DNS_RECORD(id), {
+                record_type: recordT,
+                name: name,
+                value: value,
+                priority: priority,
+                ttl: 3600
+            }) : instance.put(UPDATE_DNS_RECORD(id, idRecord), {
+                value: value,
+                ttl: 3600,
+                priority: 0
+            });
+        
+        handleDnsChange
+        .then(response => {
+            console.log(response);
+            updateRecords();
+            pushNotification({
+                messeage: `Запись ${recordT} успешно ${typeof idRecord == 'undefined' ? 'добавлена' : 'изменина' }`,
+                type: 'success'
+            });
+            setIsOpen(false);
+        })
+        .catch(e => {
+            pushNotification({
+                messeage: `Не удалсь ${typeof idRecord == 'undefined' ? 'добавить' : 'изменить'} запись ${recordT} `,
+                type: 'error'
+            });
+        })
+        .finally(() => {
+            setIsload(true);
+        })
+
     }
 
     const renderSelect = (values: [number, number] | Array<string>, id: string) => {
@@ -385,6 +505,7 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
         }
 
         return <Select
+            id={id}
             options={option}
         />;
     }
@@ -400,40 +521,49 @@ export default function ModalRecord( {setIsOpen, type, resource}: IProps ) {
     open={true}
     onCancel={() => setIsOpen(false)}
     >
-        {renderChoosetRecord()}
-        {typeof tRecord !== 'undefined' &&
+        {renderChooseRecordT()}
+        {typeof recordT !== 'undefined' &&
             <Form
                 name="modal-record"
                 onFinish={onFinish}
                 validateTrigger="onSubmit"
             >
+                <p className="modal-record__title h3">{typeof idRecord != 'undefined' ? 'Измение' : 'Создание'} {recordT} записи</p>
                 <Form.Item<FieldType> 
                     name="type"
-                    initialValue={tRecord}
+                    initialValue={recordT}
+                    hidden={true}
                 >
                     <Input />
                 </Form.Item>
                 {
-                   Object.entries(fieldsByRecord[tRecord]).map(item => {
+                   Object.entries(fieldsByRecord[recordT]).map(item => {
                     const [key, field] = item;
 
                     if(key == 'type') {
                         return null;
                     }
+
                     return <InputWrapper key={key} label={field.title} labelId={`modal-record-${field.keyField}`}>
                         <Form.Item<FieldType>
                             name={field.keyField}
-                            rules={field.rule}
+                            rules={field.rules}
+                            // initialValue={typeof dataRecord != 'undefined' && dataRecord[field.dataServer] ? dataRecord[field.dataServer] : field.defaultValue}
                             initialValue={field.defaultValue}
                             >
                             {Array.isArray(field.typeField) && renderSelect(field.typeField, `modal-record-${field.keyField}`)}
                             {!Array.isArray(field.typeField) && 
                                 <Input type={field.typeField} placeholder={field.title} id={`modal-record-${field.keyField}`} />
                             }
-                        </Form.Item>               
+                        </Form.Item>
                     </InputWrapper>
                    })
                 }
+                <div className="modal-record__footer">
+                    <button className="btn" type="submit">
+                        Сохранить
+                    </button>
+                </div>
             </Form>
         }
     </Modal>

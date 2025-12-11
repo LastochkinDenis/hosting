@@ -13,7 +13,7 @@ export const useUserStore = create<IUserStore>()(
     devtools(persist(
         (set, get) => ({
             id: 0,
-            userName: '',
+            user_name: '',
             first_name: '',
             last_name: '',
             phone: '',
