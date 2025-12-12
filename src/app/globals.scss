@@ -17,7 +17,8 @@
   --bg-head:rgb(19 91 236 / 0.1);
   --bg-second: #4C4C4C;
   --bg-third: rgb(239 246 255);
-  -bg-fourth: #d0d5db59;
+  --bg-fourth: #d0d5db59;
+  --bg-fiveth: #f6f6f8;
 
   --error: #FF0000;
 
@@ -186,6 +187,15 @@ li {
     color: var(--text-color-third);
   }
 
+  span.load {
+      animation-iteration-count: infinite;
+      animation-fill-mode: forwards;
+      animation-duration: 1s;
+      animation-name: spin;
+      animation-timing-function: linear;
+      font-size: 0.9375rem;
+  }
+
   &:not(:disabled) {
     &:hover {
       background-color: var(--color-second);
@@ -207,12 +217,22 @@ li {
         box-shadow: none;
       }
     }
+
   }
-
-
+  
+  
   &:disabled {
     cursor: auto; 
   }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .item-successful {

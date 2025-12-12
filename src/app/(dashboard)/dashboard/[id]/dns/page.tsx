@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState, createContext } from "react";
 import { useRouter } from "next/navigation";
 import ResourceRecords from "@/components/Dashboard/ResourceRecords/ResourceRecords";
-import { AxiosError, isAxiosError } from "axios";
 
 export const DomenContext = createContext({domen: '', id: ''});
 

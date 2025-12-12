@@ -30,32 +30,11 @@
         }
     }
 
-    .btn {
-        span.load {
-            animation-iteration-count: infinite;
-            animation-fill-mode: forwards;
-            animation-duration: 1s;
-            animation-name: spin;
-            animation-timing-function: linear;
-            font-size: 0.9375rem;
-        }
-    }
-
     .error {
         .ant-select-selector {
             border: 1px solid var(--error);
         }
     }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
 
     .ant-select-auto-complete {
         .ant-select-selection-placeholder {

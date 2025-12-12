@@ -1,13 +1,14 @@
 'use client';
 
 import './ResourceRecords.scss';
-import { IResourceRecords, recordType } from '@/types/domain';
+import { IResourceRecords } from '@/types/domain';
 import ModalRecord from './ModalRecord/ModalRecord';
 import { DELETE_DNS_RECORD } from '@/lib/api_endpoint';
 import { instance } from '@/lib/axios_settings';
+import { DomenContext } from '@/app/(dashboard)/dashboard/[id]/dns/page';
 
 import '@ant-design/v5-patch-for-react-19';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNotificationStore } from '@/store/notificationStrore';
 import { Popconfirm } from 'antd'
 import type { PopconfirmProps } from 'antd';
@@ -21,6 +22,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
+    const { domen } = useContext(DomenContext);
 
     const handleEdir = () => {
         setIsOpen(true);
@@ -28,7 +30,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
 
     const handleDelete: PopconfirmProps['onConfirm'] = () => {
         instance.delete(DELETE_DNS_RECORD(resourceRecords.domain_id.toString(), resourceRecords.id.toString()))
-        .then(respnse => {
+        .then(() => {
             updateRecords();
             pushNotification({
                 messeage: `${resourceRecords.record_type} была удалена`,
@@ -46,18 +48,20 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
 
     return <>
         <div className='nss-editor__item'>
-            <div className="nss-editor__item-value" onClick={handleEdir}>
-                <span className='nss-editor__item-record-type'>{resourceRecords.record_type}</span>
-                <span className='nss-editor__item-name'>{resourceRecords.name}</span>
-                <span className="nss-editor__item-value">{resourceRecords.value}</span>
+            <div className="nss-editor__item-data" onClick={handleEdir}>
+                <span className='nss-editor__item-record-type p2'>{resourceRecords.record_type}</span>
+                <span className='nss-editor__item-name p2'>{resourceRecords.name.replace(`.${domen}`, '')}</span>
+                <span className="material-symbols-outlined p2">arrow_forward</span>
+                <span className="nss-editor__item-value p2">{resourceRecords.value}</span>
             </div>
             <div className="nss-editor__item-buttons">
                 <button className='nss-editor__item-edit' onClick={handleEdir}>
                     <span className="material-symbols-outlined">edit</span>
                 </button>
                 <Popconfirm
+                    placement='topLeft'
                     title={`Удаление ${resourceRecords.record_type} записи`}
-                    description={`Вы точно хотите удалить ${resourceRecords.record_type} запись`}
+                    description={`Вы точно хотите удалить ${resourceRecords.record_type} запись?`}
                     onConfirm={handleDelete}
                     okText="Да"
                     cancelText="Нет"
@@ -76,7 +80,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
             dataRecord={{
                 'name': resourceRecords.name,
                 'value': resourceRecords.value,
-                'priority': resourceRecords.priority.toString()
+                'priority': resourceRecords.priority?.toString() ?? ''
             }}
         />}
     </>

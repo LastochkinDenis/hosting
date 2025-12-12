@@ -65,6 +65,7 @@ export default function ResourceRecords({ id } : {id : string}) {
             <div className="nss-editor__header">
                 <p className="nss-editor__title h2">Ресурсные записи</p>
                 <Popconfirm
+                    placement='topLeft'
                     title = 'Отчиска всей зоны'
                     description = 'Вы уверены что хотете удалить все записи?'
                     okText='Да'

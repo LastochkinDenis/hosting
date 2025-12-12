@@ -13,9 +13,36 @@
 
     &__item {
         width: 100%;
-        padding: 1.2rem 0 1.2rem 2.25rem;
-        transition: background .3s ease-in,
-        color .3s ease-in;
+        display: flex;
+        cursor: pointer;
+
+        
+        &-data {
+            padding: 1.2rem 1.2rem 1.2rem 2.25rem;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-color-primary);
+            transition: background .3s ease-in,
+            color .3s ease-in;
+
+            .material-symbols-outlined {
+                font-size: var(--font-size-14-16);
+            }
+
+            &:hover {
+                background-color: var(--border-primary);
+            }
+        }
+
+        &-value {
+            word-break: break-all;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            overflow: hidden;
+        }
         
         &--add-record {
             display: flex;
@@ -25,6 +52,12 @@
             background-color: transparent;
             border: none;
             color: var(--color-primary);
+            padding: 1.2rem 1.2rem 1.2rem 2.25rem;
+            transition: background .3s ease-in;
+
+            &:hover {
+                background-color: var(--border-primary);
+            }
         }
 
         &-add-text {
@@ -32,8 +65,29 @@
             text-transform: uppercase;
         }
 
-        &:hover {
-            background-color: var(--border-primary);
+        &-buttons {
+            display: flex;
+
+            button {
+                padding: 1.25rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                border: none;
+                background-color: var(--bg-fiveth);
+                // border-left: 1px solid var(--text-color-third);
+                transition: background .3s ease-in,
+                color .3s ease-in;
+
+                &:hover {
+                    background-color: var(--border-primary);
+                }
+
+                // &:last-child {
+                //     border-right: 1px solid var(--text-color-third);
+                // }
+            }
         }
 
         border-bottom: 1px solid var(--text-color-third);
@@ -81,6 +135,36 @@
     &__footer {
         .btn {
             margin-left: auto;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .nss-editor {
+        &__item {
+            &--add-record,
+            &-data {
+                padding: 0.6rem 0.6rem 0.6rem 1.25rem;
+            }
+    
+            &-buttons {
+                button {
+                    padding: 0.6rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 460px) {
+    .nss-editor {
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .btn {
+                width: 100%;
+            }
         }
     }
 }
