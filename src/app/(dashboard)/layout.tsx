@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore';
 import Sidebar from '@/components/Dashboard/Sidebar/Sidebar';
 import Header from '@/components/Dashboard/Header/Header';
 import './globals.scss';
+import { redirect } from 'next/navigation';
 
 export default function DashboardLayout({
   children,
@@ -16,7 +17,8 @@ export default function DashboardLayout({
   
   useLayoutEffect(() => {
     if (!isAuthenticated && isAuthenticated !== null) {
-      router.push('/login');
+      // router.push('/login');
+      redirect('/login');
     }
   }, [isAuthenticated, router]);
 

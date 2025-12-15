@@ -15,7 +15,6 @@ const originalRequest = instance.request.bind(instance);
 instance.request = async function(config: any) {
   if (USE_MOCK_API) {
     try {
-      console.log('test');
       const mockResponse = await mockApiHandler(config);
       // Возвращаем мок ответ только если мок API его обработал
       return Promise.resolve({

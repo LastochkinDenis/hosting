@@ -16,7 +16,6 @@ export default function ResourceRecords({ id } : {id : string}) {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
     const [tRecord, setTRecord] = useState<recordType | undefined>();
-    const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
     const getResourceRecords = () => {
         instance.get(GET_DOMAIN_DNS(id))
@@ -28,6 +27,13 @@ export default function ResourceRecords({ id } : {id : string}) {
         })
         .then(data => {
             setResourceRecords(data);
+        })
+        .catch(e => {
+            console.log(e);
+            pushNotification({
+                messeage: 'Произошла ошибка загрузки ресурсных записей',
+                type: 'error'
+            });
         })
     }
 
