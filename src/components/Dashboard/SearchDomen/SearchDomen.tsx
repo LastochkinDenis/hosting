@@ -2,7 +2,6 @@
 import { CHECK_DOMAIN, SUGGESTIONS_DOMAIN } from '@/lib/api_endpoint';
 import './SearchDomen.scss';
 import { instance } from '@/lib/axios_settings';
-import Tabs from '@/Ui/tabs/Tabs';
 import BuyDomain from '@/components/BuyDomain/BuyDomain';
 import { IDomenSearch } from '@/types/domain';
 import { useNotificationStore } from '@/store/notificationStrore';
@@ -28,20 +27,13 @@ const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
 type seacrhItem = {value: string, label: JSX.Element}
 type autoCompleteRefType = GetRef<typeof AutoComplete>;
 
-const TOP_LEVEL_DOMEN = [{key: '.ru', text: '.ru'}, {key: '.com', text: '.com'}, {key: '.org', text: '.org'}];
-
-const DEFAULT_TOP_LEVEL_DOMEN = '.ru';
-
 export default function SearchDomen() {
     const [dataDomains, setDataDomains] = useState<Array<IDomenSearch>>([]);
     const [selectDomain, setSelectDomain] = useState<IDomenSearch>();
-    const [topLevelDomain, setTopLevelDomain] = useState<string>(DEFAULT_TOP_LEVEL_DOMEN);
     const [searchValue, setSearchValue] = useState<string>('');
     const [error, setError] = useState<Array<string>>([]);
     const [isLoad, setIsLoad] = useState<boolean>(false);
-    const [isShowDomainsList, setIsShowDomainsList] = useState<boolean>(false);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-    const ref = useRef<autoCompleteRefType | null>(null);
     const { pushNotification } = useNotificationStore();
     
     const renderSerchOption = (): AutoCompleteProps['options'] => {
@@ -61,27 +53,18 @@ export default function SearchDomen() {
         }, [] as Array<seacrhItem>);
     }
 
-    const onSearch = debounce((searchText:string) => {
+    const onSearch = (searchText:string) => {
         const value = searchText.trim();
-        const tld:string | undefined = TOP_LEVEL_DOMEN.find(item => value.endsWith(item.key))?.key;
+        
         setSearchValue(value);
         setError(prev => {
-
             if(value) {
                 prev = prev.filter(item => item != 'AutoComplete');
             }
 
-            if(tld) {
-                prev = prev.filter(item => item != 'Tabs');
-            }
-
             return prev;
         })
-
-        if(typeof tld == 'string') {
-            setTopLevelDomain(tld);
-        }
-    }, 500);
+    };
 
     const onSelect = (data:string) => {
         const domain = dataDomains.find(item => item.dname == data);
@@ -102,23 +85,14 @@ export default function SearchDomen() {
         setIsOpenModal(true);
     }
 
-    const onChangeTab = (key: string, isChecked: boolean) => {         
-        setTopLevelDomain(key);
-
-        setError(prev => {
-            return prev.filter(item => item != 'Tabs')
-        });
-    }
-
     const getDomains = async () => {
-        if(searchValue && topLevelDomain) {
+        if(searchValue) {
             setIsLoad(true);
-            const serchDomain:string = searchValue + (searchValue.endsWith(topLevelDomain) ? '' : topLevelDomain);
     
             const responseDomains:Array<IDomenSearch> = [];
             
             //Получение похожих доменов
-            await instance.get(SUGGESTIONS_DOMAIN + `${serchDomain}`, { params: { limit: 10 } })
+            await instance.get(SUGGESTIONS_DOMAIN + `${searchValue}`, { params: { limit: 10 } })
             .then(response => {
                 if(response.status != 200) throw Error();
                 return response.data;
@@ -136,7 +110,7 @@ export default function SearchDomen() {
             
             //Получение запрашиваемого домена
             await instance.post(CHECK_DOMAIN, {
-                domain_name: serchDomain
+                domain_name: searchValue
             })
             .then(response => {
                 if(response.status != 200) throw Error();
@@ -154,15 +128,11 @@ export default function SearchDomen() {
 
             setDataDomains(responseDomains);
             setIsLoad(false);
-            ref.current?.focus();            
         } else {
             const errorList = [];
 
             if(!searchValue) {
                 errorList.push('AutoComplete');
-            }
-            if(!topLevelDomain) {
-                errorList.push('Tabs');
             }
 
             setError(errorList);
@@ -189,21 +159,12 @@ export default function SearchDomen() {
                             getDomains();
                         }
                     }}
-                    open={isShowDomainsList}
-                    onFocus={() => {
-                        setIsShowDomainsList(true);
-                    }}
-                    onBlur={() => {
-                        setIsShowDomainsList(false);
-                    }}
-                    ref={ref}
                 />
                 {
                     isLoad ? <button className='btn' disabled><span className="material-symbols-outlined load">progress_activity</span> <span className=''></span> Загрузка...</button> :
                     <button className="btn" onClick={() => getDomains()}>Проверить</button>
                 }
             </div>
-            <Tabs type='radio' tabs={TOP_LEVEL_DOMEN} name='top-domen' currentValue={topLevelDomain} callBack={onChangeTab} className={error.find(item => item == 'Tabs') ? 'error' : ''} />
         </div>
         <BuyDomain isOpen={isOpenModal} callbackSetIsOpen={() => setIsOpenModal(false)} domain={selectDomain} />
     </>

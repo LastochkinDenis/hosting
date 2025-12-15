@@ -11,7 +11,7 @@ export default function Page() {
     return <>
         <h1 className="dashboard-page__title h1 dashboard-page__title--with-subtitle">Управление файлами</h1>
         <h2 className="dashboard-page__subtitle h4">Получите доступ к вашему файловому менеджеру и найдите полезные руководства по управлению файлами вашего сайта</h2>
-        <InfoBlock image={<Image src={Img} alt="" />} button={<button className="btn mini"><span className="one-line-text">Открыть менеджер файлов</span><span className="material-symbols-outlined">open_in_new</span></button>}>
+        <InfoBlock image={<Image src={Img} alt="" />} button={<a className="btn mini"><span className="one-line-text">Открыть менеджер файлов</span><span className="material-symbols-outlined">open_in_new</span></a>}>
             <p className="p3 dasboard-page__info-title-top">Основной инструмент</p>
             <p className="h5 info-block__title">Файловый менеджер ISPManager</p>
             <p className="p2">Используйте наш мощный файловый менеджер для загрузки, редактирования и управления всеми файлами и папками вашего сайта прямо в браузере.</p>

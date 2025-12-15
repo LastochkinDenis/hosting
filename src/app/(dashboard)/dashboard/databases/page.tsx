@@ -8,7 +8,7 @@ export default function Page() {
     return <>
         <h1 className="dashboard-page__title h1 dashboard-page__title--with-subtitle">Управление базами данных</h1>
         <h2 className="dashboard-page__subtitle h4">Получите доступ к панели управления ISPManager и найдите от ответы на частые вопросы</h2>
-        <InfoBlock button={<button className="btn mini"><span className="one-line-text">прейти в ISPManager</span><span className="material-symbols-outlined">open_in_new</span></button>}>
+        <InfoBlock button={<a className="btn mini"><span className="one-line-text">Управление базами данных</span><span className="material-symbols-outlined">open_in_new</span></a>}>
             <p className="h5 info-block__title">Доступ в панель уравления</p>
             <p className="p2">Все операции с базами данных (создание, удаление, управление пользовтелеями) выполняются в ISPManager</p>
         </InfoBlock>

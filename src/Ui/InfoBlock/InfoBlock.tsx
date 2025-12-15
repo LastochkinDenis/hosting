@@ -24,10 +24,7 @@ export default function InfoBlock({ image, children, button } : IProps) {
             <div className="info-block__content">
                 {children}
             </div>
-            <button className="btn">
-                <span className='one-line-text'>Открыть менеджер файлов</span>
-                <span className='material-symbols-outlined'>open_in_new</span>
-            </button>
+            { button }
         </div>
     </div>
 }
