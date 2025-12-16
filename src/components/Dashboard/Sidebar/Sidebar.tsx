@@ -6,6 +6,7 @@ import { useUIStore } from '@/store/uiStore';
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import UserPopover from '@/components/Dashboard/UserPopover/UserPopover';
 import Link from 'next/link';
 
 const menuItems = [
@@ -72,29 +73,19 @@ export default function Sidebar() {
             <span className="material-symbols-outlined">help</span>
           </button>
         </div>
-        <div className="dashboard-sidebar__user">
-          <div
-            className="dashboard-sidebar__avatar"
-            // style={{
-            //   backgroundImage: user?.avatar ? `url("${user.avatar}")` : undefined,
-            // }}
-          />
-          {
-            isSidebarOpen &&
-            <div className="dashboard-sidebar__user-info">
-                <h2 className="dashboard-sidebar__user-name">{first_name || 'Пользователь'}</h2>
-                <button
-                  className="dashboard-sidebar__logout"
-                  onClick={() => {
-                    logout();
-                    clearUserData();
-                  }}
-                >
-                  Выйти
-                </button>
-            </div>
-          }
-        </div>
+        <UserPopover>
+          <div className="dashboard-sidebar__user">
+            <div
+              className="dashboard-sidebar__avatar"
+            />
+            {
+              isSidebarOpen &&
+              <div className="dashboard-sidebar__user-info">
+                  <h2 className="dashboard-sidebar__user-name">{first_name || 'Пользователь'}</h2>
+              </div>
+            }
+          </div>
+        </UserPopover>
       </div>
     </aside>
   );

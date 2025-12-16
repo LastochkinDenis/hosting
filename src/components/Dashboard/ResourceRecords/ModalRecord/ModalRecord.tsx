@@ -188,8 +188,7 @@ export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, 
         }
     }}
     open={true}
-    onCancel={() => setIsOpen(false)}
-    >
+    onCancel={() => setIsOpen(false)}>
         {renderChooseRecordT()}
         {typeof recordT !== 'undefined' &&
             <Form

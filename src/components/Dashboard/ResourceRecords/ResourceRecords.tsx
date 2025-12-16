@@ -1,4 +1,4 @@
-'use clinet';
+'use client';
 import './ResourceRecords.scss';
 import { instance } from "@/lib/axios_settings";
 import { GET_DOMAIN_DNS, DELETE_DNS_RECORD } from "@/lib/api_endpoint";

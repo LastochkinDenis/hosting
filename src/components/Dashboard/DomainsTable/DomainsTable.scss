@@ -173,25 +173,6 @@
   }
 }
 
-.domains-table__settings-navigation-item {
-  list-style: none;
-  transition: background-color .3s ease-in;
-  
-  a {
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-  }
-  
-  &:hover {
-    background-color: var(--border-primary);
-    a {
-      color: var(--color-primary);    
-    }
-  }
-}
-
 // Dark mode
 @media (prefers-color-scheme: dark) {
   .domains-table {

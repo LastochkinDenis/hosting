@@ -5,3 +5,6 @@ export { default as ServicesCard } from './ServicesCard/ServicesCard';
 export { default as BillingCard } from './BillingCard/BillingCard';
 export { default as DomainsTable } from './DomainsTable/DomainsTable';
 export { default as QuickActions } from './QuickActions/QuickActions';
+export { default as DomainList } from './DomainList/DomainList';
+export { default as ResourceRecords} from './ResourceRecords/ResourceRecords';
+export { default as UserPopover } from './UserPopover/UserPopover';

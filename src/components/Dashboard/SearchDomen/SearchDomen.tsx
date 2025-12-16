@@ -3,7 +3,7 @@ import { CHECK_DOMAIN, SUGGESTIONS_DOMAIN } from '@/lib/api_endpoint';
 import './SearchDomain.scss';
 import { instance } from '@/lib/axios_settings';
 import { IDomainSearch } from '@/types/domain';
-import { DomainList } from '../DomainList/DomainList';
+import DomainList from '../DomainList/DomainList';
 
 import { Form, Input, ConfigProvider } from 'antd';
 import type { FormProps } from 'antd/lib';
@@ -103,7 +103,7 @@ export default function Searchdomain() {
                     </div>
                 </Form>
             </ConfigProvider>
-            <DomainList domainList={dataDomains} />
+            <DomainList domainList={dataDomains} isLoad={isLoad} />
         </div>
     </>
 }

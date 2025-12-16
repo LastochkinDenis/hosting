@@ -263,6 +263,38 @@ li {
   z-index: 1051;
 }
 
+.popever {  
+  a,
+  button {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &__item {
+    list-style: none;
+    transition: background-color .3s ease-in;
+
+  }
+  
+  &__item:hover {
+    background-color: var(--border-primary);
+
+    a,
+    span,
+    p {
+      color: var(--color-primary);    
+    }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
