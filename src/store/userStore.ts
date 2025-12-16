@@ -13,12 +13,12 @@ export const useUserStore = create<IUserStore>()(
     devtools(persist(
         (set, get) => ({
             id: 0,
-            user_name: '',
+            username: '',
             first_name: '',
             last_name: '',
             phone: '',
             email_verified: false,
-            phoen_verified: false,
+            phone_verified: false,
             isp_account_id: '',
             created_at: '',
             hosting_account: {
@@ -29,12 +29,12 @@ export const useUserStore = create<IUserStore>()(
             clearUserData: () => {
                 set(() => ({
                     id: 0,
-                    userName: '',
+                    username: '',
                     first_name: '',
                     last_name: '',
                     phone: '',
                     email_verified: false,
-                    phoen_verified: false,
+                    phone_verified: false,
                     isp_account_id: '',
                     created_at: '',
                     hosting_account: {

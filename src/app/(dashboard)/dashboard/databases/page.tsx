@@ -1,14 +1,19 @@
+'use client';
 import FAQ from "@/Ui/FAQ/FAQ"
 import FAQ_item from "@/Ui/FAQ/FAQ_item"
 import InfoBlock from "@/Ui/InfoBlock/InfoBlock";
 import './page.scss';
 import ContactSupport from "@/Ui/ContactSupport/ContactSupport";
+import { useUserStore } from "@/store/userStore";
 
 export default function Page() {
+
+    const { isp_login_link } = useUserStore();
+
     return <>
         <h1 className="dashboard-page__title h1 dashboard-page__title--with-subtitle">Управление базами данных</h1>
         <h2 className="dashboard-page__subtitle h4">Получите доступ к панели управления ISPManager и найдите от ответы на частые вопросы</h2>
-        <InfoBlock button={<a className="btn mini"><span className="one-line-text">Управление базами данных</span><span className="material-symbols-outlined">open_in_new</span></a>}>
+        <InfoBlock button={<a className="btn mini" href={isp_login_link}><span className="one-line-text">Управление базами данных</span><span className="material-symbols-outlined">open_in_new</span></a>}>
             <p className="h5 info-block__title">Доступ в панель уравления</p>
             <p className="p2">Все операции с базами данных (создание, удаление, управление пользовтелеями) выполняются в ISPManager</p>
         </InfoBlock>

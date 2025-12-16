@@ -7,12 +7,12 @@ export interface IHostingAcount {
 
 export interface IUser {
     id: number;
-    user_name: string;
+    username: string;
     first_name: string | null;
     last_name: string | null;
     phone: string | null;
     email_verified: boolean;
-    phoen_verified: boolean;
+    phone_verified: boolean;
     isp_account_id: string;
     created_at: string;
     hosting_account: IHostingAcount;

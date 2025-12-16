@@ -6,8 +6,7 @@ import { REFRESH_TOKEN, USER_ME } from "@/lib/api_endpoint";
 import { useUserStore } from "@/store/userStore";
 
 
-import React, { useEffect, useEffectEvent, useRef } from "react";
-import { Cossette_Texte } from "next/font/google";
+import React, { useEffect, useRef } from "react";
 
 export default function UserAuth({children} : {children: React.ReactNode}) {
     const { isAuthenticated, token, refresh_token, logout, tokenUpdate } = useAuthStore();

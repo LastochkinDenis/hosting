@@ -1,17 +1,22 @@
+'use client';
 import FAQ from "@/Ui/FAQ/FAQ"
 import FAQ_item from "@/Ui/FAQ/FAQ_item"
 import InfoBlock from "@/Ui/InfoBlock/InfoBlock";
 import './page.scss';
 import Img from '@/../public/unnamed.png';
 import ContactSupport from "@/Ui/ContactSupport/ContactSupport";
+import { useUserStore } from "@/store/userStore";
 
 import Image from "next/image";
 
 export default function Page() {
+
+    const { isp_login_link } = useUserStore();
+
     return <>
         <h1 className="dashboard-page__title h1 dashboard-page__title--with-subtitle">Управление файлами</h1>
         <h2 className="dashboard-page__subtitle h4">Получите доступ к вашему файловому менеджеру и найдите полезные руководства по управлению файлами вашего сайта</h2>
-        <InfoBlock image={<Image src={Img} alt="" />} button={<a className="btn mini"><span className="one-line-text">Открыть менеджер файлов</span><span className="material-symbols-outlined">open_in_new</span></a>}>
+        <InfoBlock image={<Image src={Img} alt="" />} button={<a className="btn mini" href={isp_login_link}><span className="one-line-text">Открыть менеджер файлов</span><span className="material-symbols-outlined">open_in_new</span></a>}>
             <p className="p3 dasboard-page__info-title-top">Основной инструмент</p>
             <p className="h5 info-block__title">Файловый менеджер ISPManager</p>
             <p className="p2">Используйте наш мощный файловый менеджер для загрузки, редактирования и управления всеми файлами и папками вашего сайта прямо в браузере.</p>

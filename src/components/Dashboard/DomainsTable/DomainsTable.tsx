@@ -17,25 +17,6 @@ const getStatusClass = (status: string) => {
     if (status === 'active') return <span className='domains-table__status item-successful' >Активен</span>;
     return <span className='domains-table__status item-error'>Истек</span>;
 };
-
-const MOCK_DATA:Array<IDomainTable> = [
-  {
-    key: 1,
-    id: 1,
-    domen: 'testq.ru',
-    status: 'active',
-    expires: '2025-12-08',
-    settings: undefined
-  },
-  {
-    key: 2,
-    id: 2,
-    domen: 'test.ru',
-    status: 'inactive',
-    expires: '2025-12-08',
-    settings: undefined
-  }
-]
   
 export default function DomainsTable() {
   const [searchText, setSearchText] = useState<string>('');
@@ -68,8 +49,6 @@ export default function DomainsTable() {
           }
           return result;
         }, []));
-      } else {
-        setDomains(MOCK_DATA);
       }
     })
     .catch((e) => {
