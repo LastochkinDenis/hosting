@@ -162,6 +162,7 @@ li {
   font-size: var(--font-size-14-16);
   font-weight: 600;
   line-height: 120%;
+  height: fit-content;
 
   .one-line-text {
     -webkit-line-clamp: 1;
@@ -233,6 +234,13 @@ li {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.item-successful,
+.item-error {
+  padding: 0.3125rem;
+  border-radius: 0.3125rem;
+  text-align: center;
 }
 
 .item-successful {

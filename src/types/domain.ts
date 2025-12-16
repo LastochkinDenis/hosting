@@ -1,4 +1,4 @@
-export interface IDomenSearch {
+export interface IDomainSearch {
     dname: string;
     price: number | null;
     available: boolean;

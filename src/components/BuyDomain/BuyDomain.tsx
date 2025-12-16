@@ -1,6 +1,6 @@
 'use client';
 import './BuyDomain.scss';
-import { IDomenSearch } from "@/types/domain";
+import { IDomainSearch } from "@/types/domain";
 import InputWrapper from '@/Ui/Input/InputWrapper'
 import { instance } from '@/lib/axios_settings';
 import { REGISTER_DOMAIN } from '@/lib/api_endpoint';
@@ -15,7 +15,7 @@ import {MaskedInput} from 'antd-mask-input'
 
 interface IProps {
     isOpen: boolean;
-    domain: IDomenSearch | undefined
+    domain: IDomainSearch | undefined
     callbackSetIsOpen: (v: boolean) => void
 }
 
