@@ -13,9 +13,9 @@ interface IProps {
 const PATTERN = /(\.[a-zа-я]{1,}){1,}/;
 
 export default function DomainItem({ domain } : IProps ) {
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     if(domain) {
-        const [showModal, setShowModal] = useState<boolean>(false);
         const dname:string = domain.dname.replace(PATTERN, '');
         const topLevelDomain:RegExpMatchArray | null = domain.dname.match(PATTERN);
         

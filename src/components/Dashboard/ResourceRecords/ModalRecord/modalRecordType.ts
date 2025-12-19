@@ -75,7 +75,7 @@ export type fieldsByRecordType = {
 }
 
 export type fieldsRecord<Type> = {
-    [P in keyof Type]: {
+    [P in keyof Type as Exclude<P, 'type'>]: {
         keyField: P,
         title: string;
         typeField: 'text' | [number, number] | Array<string> | 'number';

@@ -16,10 +16,6 @@ export default function SettingsDomain({id} : {id: number}) {
                     <Link href={`/dashboard/${id}/dns`}><span className="material-symbols-outlined text-xl">dns</span> 
                     DNS-записи</Link>
                 </li>
-                <li className='popever__item'>
-                    <Link href={`/dashboard/${id}/dns`}><span className="material-symbols-outlined text-xl">dns</span> 
-                    DNS-записи</Link>
-                </li>
             </ul>}
             styles={POPOVER_STYLE}
             trigger='click'

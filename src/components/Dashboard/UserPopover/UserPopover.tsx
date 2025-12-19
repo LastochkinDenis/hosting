@@ -8,7 +8,6 @@ import { useState } from 'react';
 import Link from "next/link";
 
 export default function UserPopover({ children }: { children: React.ReactNode }) {
-    const [ isOpen, setIsOpen ] = useState<boolean>(false);
     const { logout } = useAuthStore();
     const { clearUserData } = useUserStore();
 
@@ -18,11 +17,8 @@ export default function UserPopover({ children }: { children: React.ReactNode })
     }
 
     return <Popover
-        
         styles={{...POPOVER_STYLE}}
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        trigger={'click'}
+        trigger={'hover'}
         placement='rightBottom'
         content={<ul className="popever">
             <li className="popever__item">

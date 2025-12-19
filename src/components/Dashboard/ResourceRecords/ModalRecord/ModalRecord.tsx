@@ -208,10 +208,6 @@ export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, 
                    Object.entries(fieldsByRecord[recordT]).map(item => {
                     const [key, field] = item;
 
-                    if(key == 'type') {
-                        return null;
-                    }
-
                     return <InputWrapper key={key} label={field.title} labelId={`modal-record-${field.keyField}`}>
                         <Form.Item<FieldType>
                             name={field.keyField}

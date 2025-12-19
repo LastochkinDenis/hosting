@@ -25,12 +25,7 @@ export const fieldsByRecord: FormField = {
                 {pattern: /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/, message: "Некоректный ip address"}
             ],
             dataServer: 'value'
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
+        }
     }, 
     [recordType.AAAA]: {
         'subdomain': {
@@ -54,11 +49,6 @@ export const fieldsByRecord: FormField = {
             ],
             dataServer: 'value'
         },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
     },
     [recordType.CNAME]: {
         'subdomain': {
@@ -81,11 +71,6 @@ export const fieldsByRecord: FormField = {
                 {max: 50, message: "Максимальный размере canonical name 50 символов"}
             ],
             dataServer: 'value',
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
         }
     },
     [recordType.MX]: {
@@ -119,12 +104,7 @@ export const fieldsByRecord: FormField = {
                 {required: true, message: 'Необходимо выбрать priority'},
             ],
             dataServer: 'priority',
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
+        }
     },
     [recordType.NS]: {
         'subdomain': {
@@ -157,12 +137,7 @@ export const fieldsByRecord: FormField = {
                 {pattern: /\d|\d{2}/, message: 'Некоректный priority'}
             ],
             dataServer: 'priority',
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
+        }
     },
     [recordType.TXT]: {
         'subdomain': {
@@ -186,11 +161,6 @@ export const fieldsByRecord: FormField = {
             ],
             dataServer: 'value',
         },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
     },
     [recordType.SRV]: {
         'service': {
@@ -235,11 +205,6 @@ export const fieldsByRecord: FormField = {
                 {min: 0, message: 'Port не должно быть меньше 0'}
             ],
             defaultValue: 0,
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
         }
     },
     [recordType.CAA]: {
@@ -278,11 +243,6 @@ export const fieldsByRecord: FormField = {
             rules: [
                 {required: true, message: 'Необходимо ввести value'}
             ]
-        },
-        'type': {
-            keyField: 'type',
-            title: '',
-            typeField: 'text'
-        } 
+        }
     },
 };
