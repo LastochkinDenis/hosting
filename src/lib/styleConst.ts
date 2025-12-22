@@ -4,7 +4,8 @@ export const POPOVER_STYLE = {
     root: {
         overflow: 'hidden',
         background: 'transparent',
-        borderRadius: '0.3125rem'
+        borderRadius: '0.3125rem',
+        border: '1px solid var(--text-color-stroke)'
     },
     body: {
         padding: '0',

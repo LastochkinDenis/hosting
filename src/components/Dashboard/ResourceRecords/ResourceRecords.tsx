@@ -84,10 +84,10 @@ export default function ResourceRecords({ id } : {id : string}) {
                     </button>
                 </Popconfirm>
             </div>
-            <div className="nss-editor__content">
-                <button onClick={handleRecordsAdd} className="nss-editor__item nss-editor__item--add-record">
+            <div className="nss-editor__content editor__list">
+                <button onClick={handleRecordsAdd} className="editor__item editor__item-add-record">
                     <span className="material-symbols-outlined">add</span>
-                    <span className='nss-editor__item-add-text'>Добавить запись</span>
+                    <span className='editor__item-add-text'>Добавить запись</span>
                 </button>
                 {resourceRecords.map((item) => {
                     return <ResourceRecordItem key={item.id} resourceRecords={item} updateRecords={() => getResourceRecords()}  />

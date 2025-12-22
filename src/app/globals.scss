@@ -295,6 +295,96 @@ li {
   }
 }
 
+.editor {
+
+  &__list {
+    border-top: 1px solid var(--text-color-third);
+  }
+
+  &__item {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+
+    &-data {
+      padding: 1.2rem 1.2rem 1.2rem 2.25rem;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-color-primary);
+      transition: background .3s ease-in,
+      color .3s ease-in;
+
+      &:hover {
+        background-color: var(--border-primary);
+      }
+    }
+
+    &-add-record {
+      display: flex;
+      gap: 0.625rem;
+      align-items: center;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      color: var(--color-primary);
+      padding: 1.2rem 1.2rem 1.2rem 2.25rem;
+      transition: background .3s ease-in;
+
+      &:hover {
+          background-color: var(--border-primary);
+      }
+
+    }
+
+    &-add-text {
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    &-buttons {
+      display: flex;
+
+      button {
+          padding: 1.25rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border: none;
+          background-color: var(--bg-fiveth);
+          transition: background .3s ease-in,
+          color .3s ease-in;
+
+          &:hover,
+          &.activate {
+              background-color: var(--border-primary);
+          }
+      }
+    }
+
+    border-bottom: 1px solid var(--text-color-third);
+  }
+}
+
+@media (max-width: 768px) {
+  .nss-editor {
+      &__item {
+          &--add-record,
+          &-data {
+              padding: 0.6rem 0.6rem 0.6rem 1.25rem;
+          }
+  
+          &-buttons {
+              button {
+                  padding: 0.6rem;
+              }
+          }
+      }
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

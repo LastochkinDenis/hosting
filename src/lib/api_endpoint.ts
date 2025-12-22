@@ -19,3 +19,7 @@ export const GET_DOMAIN_DNS = (id: string) => `/domains/${id}/dns`;
 export const CREATE_DNS_RECORD = (id:string) => `/domains/${id}/dns`;
 export const UPDATE_DNS_RECORD = (domain_id: string, record_id: string) => `/domains/${domain_id}/dns/${record_id}`
 export const DELETE_DNS_RECORD = (domain_id: string, record_id: string) => `/domains/${domain_id}/dns/${record_id}`
+
+//PROFILES
+export const PROFILES_INDIVIDUAL = '/profiles/individual';
+export const PROFILES_ORGANIZATION = '/profiles/organization';

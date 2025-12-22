@@ -47,15 +47,15 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
     }
 
     return <>
-        <div className='nss-editor__item'>
-            <div className="nss-editor__item-data" onClick={handleEdir}>
+        <div className='editor__item nss-editor__item'>
+            <div className="editor__item-data nss-editor__item-data" onClick={handleEdir}>
                 <span className='nss-editor__item-record-type p2'>{resourceRecords.record_type}</span>
                 <span className='nss-editor__item-name p2'>{resourceRecords.name.replace(`.${domen}`, '')}</span>
                 <span className="material-symbols-outlined p2">arrow_forward</span>
                 <span className="nss-editor__item-value p2">{resourceRecords.value}</span>
             </div>
-            <div className="nss-editor__item-buttons">
-                <button className='nss-editor__item-edit' onClick={handleEdir}>
+            <div className="editor__item-buttons nss-editor__item-buttons">
+                <button className='editor__item-button nss-editor__item-edit' onClick={handleEdir}>
                     <span className="material-symbols-outlined">edit</span>
                 </button>
                 <Popconfirm
@@ -66,7 +66,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
                     okText="Да"
                     cancelText="Нет"
                 >
-                    <button className='nss-ebitor__item-delete' >
+                    <button className='editor__item-button nss-ebitor__item-delete' >
                         <span className="material-symbols-outlined">delete</span>
                     </button>
                 </Popconfirm>
