@@ -1,9 +1,6 @@
 import { TypeUser } from "@/types/user";
 
 export interface IProfile {
-    id: number,
-    user_id: number,
-    profile_name: string,
     typeProfile: TypeUser,
     profile_data: IProfileFiz | IProfileUrl
 }

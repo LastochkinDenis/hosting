@@ -23,3 +23,7 @@ export const DELETE_DNS_RECORD = (domain_id: string, record_id: string) => `/dom
 //PROFILES
 export const PROFILES_INDIVIDUAL = '/profiles/individual';
 export const PROFILES_ORGANIZATION = '/profiles/organization';
+export const PROFILES_INDIVIDUAL_UPDATE = (profile_id: string) => `/profiles/individual/${profile_id}`;
+export const PROFILES_ORGANIZATION_UPDATE = (profile_id: string) => `/profiles/organization/${profile_id}`;
+export const PROFILES_INDIVIDUAL_DELETE = (profile_id: string) => `/profiles/individual/${profile_id}`;
+export const PROFILES_ORGANIZATION_DELETE = (profile_id: string) => `/profiles/organization/${profile_id}`;

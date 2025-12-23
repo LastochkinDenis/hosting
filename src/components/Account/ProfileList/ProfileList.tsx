@@ -11,12 +11,12 @@ import { useState, useEffect } from "react";
 
 export default function AccountList() {
     const [profiles, setPrefiels] = useState<Array<IProfile>>([]);
-    const [isOpen, setIsOpen] = useState<Boolean>(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
 
     useEffect(() => {
         const getData = async () => {
-            let profilesRequst:Array<IProfile> = [];
+            const profilesRequst:Array<IProfile> = [];
     
             const requsProfilesFiz =  instance.get(PROFILES_INDIVIDUAL);
             const requstProfilesUrl =  instance.get(PROFILES_ORGANIZATION);
@@ -28,9 +28,6 @@ export default function AccountList() {
 
                     itemResponse.data.forEach(item => {
                         profilesRequst.push({
-                            id: item.id,
-                            user_id: item.user_id,
-                            profile_name:  item.profile_name,
                             typeProfile: 'person_r_name' in item ? 'fizl' : 'uril',
                             profile_data: item
                         });
@@ -49,21 +46,43 @@ export default function AccountList() {
 
         getData();
     }, []);
+
+    const handleUpdateProfileList = (profile: IProfileFiz | IProfileUrl, typeOperation: 'update' | 'delete' = 'update') => {
+        if(typeOperation == 'update') {
+            setPrefiels(prev => [
+                ...prev.filter(item => item.profile_data.id !== profile.id),
+                {
+                    profile_data: profile,
+                    typeProfile: 'person_r_name' in profile ? 'fizl' : 'uril',
+                }
+            ])
+            return;
+        }
+
+        setPrefiels(prev => [
+            ...prev.filter(item => item.profile_data.id == profile.id)
+        ]);
+    }
     
     return <div className="profile-editor">
         <div className="profile-editor__header">
-            <p className="profile-editor__title h2">
+            <p className="title_block h2">
                 Профили
             </p>
         </div>
         <div className="editor__list">
             <button className="editor__item-add-record editor__item">
                 <span className="material-symbols-outlined">add</span>
-                <span className='editor__item-add-text'>Добавить запись</span>
+                <span className='editor__item-add-text'>Добавить профиль</span>
             </button>
             {
                 profiles.map(profile => {
-                    return <ProfileItem key={profile.id} profile={profile.profile_data} typeUser={profile.typeProfile} />
+                    return <ProfileItem 
+                    key={profile.profile_data.id} 
+                    profile={profile.profile_data} 
+                    typeUser={profile.typeProfile}
+                    handleUpdate={handleUpdateProfileList}
+                    />
                 })
             }
         </div>
