@@ -1,5 +1,16 @@
 export type TypeUser = 'fizl' | 'uril';
 
+export function getTranslateTypeUser(typeUser: TypeUser): string | never {
+    switch(typeUser) {
+        case ('fizl'):
+            return 'физ.л';
+        case ('uril'):
+            return 'юр.л';
+    }
+
+    throw Error('Нет такокго типа пользователя')
+}
+
 export interface IHostingAcount {
     ftp_username: string;
     home_directory: string

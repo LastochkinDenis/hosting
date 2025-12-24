@@ -1,11 +1,12 @@
 'use client';
 import './ProfilesList.scss';
 import { IProfileFiz, IProfileUrl } from './Profile';
-import { TypeUser } from "@/types/user";
+import { TypeUser, getTranslateTypeUser } from "@/types/user";
 import { PROFILES_INDIVIDUAL_UPDATE, PROFILES_ORGANIZATION_UPDATE,
     PROFILES_INDIVIDUAL_DELETE, PROFILES_ORGANIZATION_DELETE } from '@/lib/api_endpoint';
 import { instance } from '@/lib/axios_settings';
 import { useNotificationStore } from '@/store/notificationStrore';
+import ModalProfileEditor from './ModalProfileEditor/ModalProfileEditor';
 
 
 import '@ant-design/v5-patch-for-react-19';
@@ -79,7 +80,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
     return <>
         <div className='editor__item'>
             <div className="editor__item-data">
-                <span>{typeUser == 'fizl' ? 'Проф. физ.л' : 'Проф. юр.л'}</span>
+                <span>Проф. {getTranslateTypeUser(typeUser)}</span>
                 <span>{profile.profile_name}</span>
             </div>
             <div className="editor__item-buttons">
@@ -89,7 +90,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
                         trigger='hover'
                         onOpenChange={setNotificationOpen}
                         open={notificationOpen}
-                        content={<p className='p3'>Это профиль по умолнию для {typeUser == 'fizl' ? 'физ.л' : 'юр.л'}</p>}
+                        content={<p className='p3'>Это профиль по умолнию для {getTranslateTypeUser(typeUser)}</p>}
                     >   
                         <Popconfirm
                             placement='top'
@@ -136,5 +137,6 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
                 </Popconfirm>
             </div>
         </div>
+        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => {}} handleUpdate={handleUpdate} profile={profile} typeUser={typeUser} />}
     </>
 }

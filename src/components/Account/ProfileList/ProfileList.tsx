@@ -5,9 +5,9 @@ import { useNotificationStore } from "@/store/notificationStrore";
 import ProfileItem from "./ProfileItem";
 import { IProfile, IProfileFiz, IProfileUrl } from "./Profile";
 import './ProfilesList.scss';
+import ModalProfileEditor from '@/components/Account/ProfileList/ModalProfileEditor/ModalProfileEditor';
 
 import { useState, useEffect } from "react";
-
 
 export default function AccountList() {
     const [profiles, setPrefiels] = useState<Array<IProfile>>([]);
@@ -21,7 +21,7 @@ export default function AccountList() {
             const requsProfilesFiz =  instance.get(PROFILES_INDIVIDUAL);
             const requstProfilesUrl =  instance.get(PROFILES_ORGANIZATION);
     
-            await Promise.all([requsProfilesFiz, requstProfilesUrl])
+            Promise.all([requsProfilesFiz, requstProfilesUrl])
             .then(response => {
                 response.forEach(itemResponse => {
                     if(!Array.isArray(itemResponse.data)) throw Error();
@@ -48,20 +48,32 @@ export default function AccountList() {
     }, []);
 
     const handleUpdateProfileList = (profile: IProfileFiz | IProfileUrl, typeOperation: 'update' | 'delete' = 'update') => {
-        if(typeOperation == 'update') {
-            setPrefiels(prev => [
-                ...prev.filter(item => item.profile_data.id !== profile.id),
-                {
-                    profile_data: profile,
-                    typeProfile: 'person_r_name' in profile ? 'fizl' : 'uril',
-                }
-            ])
-            return;
-        }
+        const profilesRequst:Array<IProfile> = [];
+    
+        const requsProfilesFiz =  instance.get(PROFILES_INDIVIDUAL);
+        const requstProfilesUrl =  instance.get(PROFILES_ORGANIZATION);
 
-        setPrefiels(prev => [
-            ...prev.filter(item => item.profile_data.id == profile.id)
-        ]);
+        Promise.all([requsProfilesFiz, requstProfilesUrl])
+        .then(response => {
+            response.forEach(itemResponse => {
+                if(!Array.isArray(itemResponse.data)) throw Error();
+
+                itemResponse.data.forEach(item => {
+                    profilesRequst.push({
+                        typeProfile: 'person_r_name' in item ? 'fizl' : 'uril',
+                        profile_data: item
+                    });
+                })
+            })
+        })
+        .catch(e => {
+            pushNotification({
+                'messeage': 'Вовремя загрузки профилей произошла ошибка',
+                'type': 'error'
+            })
+        });
+
+        setPrefiels(profilesRequst);
     }
     
     return <div className="profile-editor">
@@ -71,7 +83,7 @@ export default function AccountList() {
             </p>
         </div>
         <div className="editor__list">
-            <button className="editor__item-add-record editor__item">
+            <button className="editor__item-add-record editor__item" onClick={() => {setIsOpen(true)}}>
                 <span className="material-symbols-outlined">add</span>
                 <span className='editor__item-add-text'>Добавить профиль</span>
             </button>
@@ -86,5 +98,6 @@ export default function AccountList() {
                 })
             }
         </div>
+        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => setIsOpen(v) } handleUpdate={handleUpdateProfileList} />}
     </div>
 }
