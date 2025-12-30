@@ -15,63 +15,35 @@ export default function AccountList() {
     const { pushNotification } = useNotificationStore();
 
     useEffect(() => {
-        const getData = async () => {
-            const profilesRequst:Array<IProfile> = [];
-    
-            const requsProfilesFiz =  instance.get(PROFILES_INDIVIDUAL);
-            const requstProfilesUrl =  instance.get(PROFILES_ORGANIZATION);
-    
-            Promise.all([requsProfilesFiz, requstProfilesUrl])
-            .then(response => {
-                response.forEach(itemResponse => {
-                    if(!Array.isArray(itemResponse.data)) throw Error();
-
-                    itemResponse.data.forEach(item => {
-                        profilesRequst.push({
-                            typeProfile: 'person_r_name' in item ? 'fizl' : 'uril',
-                            profile_data: item
-                        });
-                    })
-                })
-            })
-            .catch(e => {
-                pushNotification({
-                    'messeage': 'Вовремя загрузки профилей произошла ошибка',
-                    'type': 'error'
-                })
-            });
-
-            setPrefiels(profilesRequst);
-        }
-
-        getData();
+        getDataProfile();
     }, []);
 
-    const handleUpdateProfileList = (profile: IProfileFiz | IProfileUrl, typeOperation: 'update' | 'delete' = 'update') => {
+    const getDataProfile = async () => {
         const profilesRequst:Array<IProfile> = [];
-    
+
         const requsProfilesFiz =  instance.get(PROFILES_INDIVIDUAL);
         const requstProfilesUrl =  instance.get(PROFILES_ORGANIZATION);
+        
+        try {
+            const response = await Promise.all([requsProfilesFiz, requstProfilesUrl]);
+            response.forEach(responseItem => {
+                if(!Array.isArray(responseItem.data)) throw Error();
 
-        Promise.all([requsProfilesFiz, requstProfilesUrl])
-        .then(response => {
-            response.forEach(itemResponse => {
-                if(!Array.isArray(itemResponse.data)) throw Error();
-
-                itemResponse.data.forEach(item => {
+                responseItem.data.forEach(item => {
                     profilesRequst.push({
                         typeProfile: 'person_r_name' in item ? 'fizl' : 'uril',
                         profile_data: item
                     });
-                })
-            })
-        })
-        .catch(e => {
+                });
+            });
+        }
+        catch (e) {
+            console.log(e);
             pushNotification({
                 'messeage': 'Вовремя загрузки профилей произошла ошибка',
                 'type': 'error'
-            })
-        });
+            })    
+        }
 
         setPrefiels(profilesRequst);
     }
@@ -93,11 +65,11 @@ export default function AccountList() {
                     key={profile.profile_data.id} 
                     profile={profile.profile_data} 
                     typeUser={profile.typeProfile}
-                    handleUpdate={handleUpdateProfileList}
+                    handleUpdate={getDataProfile}
                     />
                 })
             }
         </div>
-        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => setIsOpen(v) } handleUpdate={handleUpdateProfileList} />}
+        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => setIsOpen(v) } handleUpdate={getDataProfile} />}
     </div>
 }

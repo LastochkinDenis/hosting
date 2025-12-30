@@ -26,38 +26,43 @@ type FieldType = Omit<IProfileFiz, "created_at" | "updated_at">;
 
 interface IProps {
   profile?: IProfileFiz;
-  handleUpdate: (profile: IProfileFiz) => void
+  handleUpdate: () => void
 }
 
 export default function ProfileEditorIndividual({ profile, handleUpdate }: IProps) {
     const { pushNotification } = useNotificationStore();
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const requestProfilesIndividual =
-      typeof profile != "undefined"
-        ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
-            ...values,
-            is_default: false
-        })
-        : instance.post(PROFILES_INDIVIDUAL, {
-            ...values
-        });
 
-    requestProfilesIndividual
-    .then(respnse => {
-        handleUpdate(respnse.data);
-        pushNotification({
-            messeage: `${typeof profile == "undefined" ? "Профиль создан" : "Профиль обновлен"}`,
-            type: 'success'
-        })
-    })
-    .catch(e => {
-        console.log(e);
-        pushNotification({
-            messeage: `${typeof profile == "undefined" ? "Ошибка создания профиля" : "Ошибка обновление профиля"}`,
-            type: 'error'
-        })
-    })
+    console.log(values.birth_date);
+    console.log(typeof values.birth_date);
+
+
+    // const requestProfilesIndividual =
+    //   typeof profile != "undefined"
+    //     ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
+    //         ...values,
+    //         is_default: false
+    //     })
+    //     : instance.post(PROFILES_INDIVIDUAL, {
+    //         ...values
+    //     });
+
+    // requestProfilesIndividual
+    // .then(respnse => {
+    //     handleUpdate();
+    //     pushNotification({
+    //         messeage: `${typeof profile == "undefined" ? "Профиль создан" : "Профиль обновлен"}`,
+    //         type: 'success'
+    //     })
+    // })
+    // .catch(e => {
+    //     console.log(e);
+    //     pushNotification({
+    //         messeage: `${typeof profile == "undefined" ? "Ошибка создания профиля" : "Ошибка обновление профиля"}`,
+    //         type: 'error'
+    //     })
+    // })
   };
 
   const validatePassporSerialNumber = (
@@ -66,7 +71,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
     callback: () => void
   ) => {
     // Прядовращает другие проврки так как поле не обязательное и пустое
-    if ("____ ______" == value || "" == value || typeof value == "undefined")
+    if ("____ ______" == value || "" == value || typeof value == "undefined" || value == null)
       return Promise.resolve();
 
     if (!/\d{4} \d{6}/.test(value)) return Promise.reject();

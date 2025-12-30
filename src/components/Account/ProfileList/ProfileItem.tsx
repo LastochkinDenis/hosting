@@ -16,8 +16,7 @@ import { useState } from 'react';
 interface IProps {
     profile: IProfileFiz | IProfileUrl,
     typeUser: TypeUser,
-    handleUpdate: (profile: IProfileFiz | IProfileUrl, 
-    typeOperation?: 'update' | 'delete') => void
+    handleUpdate: () => void
 }
 
 export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps) {
@@ -38,7 +37,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
             return response.data;
         })
         .then(data => {
-            handleUpdate(data);
+            handleUpdate();
 
             pushNotification({
                 messeage: `Профиль ${profile.profile_name} был обновлен`,
@@ -61,7 +60,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
 
         deleteRequst
         .then(() => {
-            handleUpdate(profile, 'delete');
+            handleUpdate();
 
             pushNotification({
                 messeage: `Профиль ${profile.profile_name} был удален`,
@@ -137,6 +136,6 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
                 </Popconfirm>
             </div>
         </div>
-        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => {}} handleUpdate={handleUpdate} profile={profile} typeUser={typeUser} />}
+        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => {setIsOpen(v)}} handleUpdate={handleUpdate} profile={profile} typeUser={typeUser} />}
     </>
 }

@@ -16,7 +16,7 @@ interface IProps {
     typeUser?: TypeUser;
     modalOpen: boolean;
     setModalOpen: (v: boolean) => void;
-    handleUpdate: (profile: IProfileFiz | IProfileUrl, typeOperation?: 'update' | 'delete') => void;
+    handleUpdate: () => void;
 }
 
 export default function ModalProfileEditor({profile, typeUser, handleUpdate, modalOpen, setModalOpen} : IProps) {
