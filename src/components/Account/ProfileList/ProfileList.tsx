@@ -27,7 +27,7 @@ export default function AccountList() {
 
                 responseItem.data.forEach(item => {
                     profilesRequst.push({
-                        typeProfile: 'person_r_name' in item ? 'fizl' : 'uril',
+                        typeProfile: 'person_r_name' in item ? 'fiz' : 'url',
                         profile_data: item
                     });
                 });

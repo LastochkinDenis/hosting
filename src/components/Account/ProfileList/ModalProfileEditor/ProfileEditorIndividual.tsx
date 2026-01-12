@@ -8,6 +8,7 @@ import {
   PROFILES_INDIVIDUAL_UPDATE,
 } from "@/lib/api_endpoint";
 import { validatePhone } from "@/lib/validators";
+import './ModalProfileEditor.scss';
 
 import {
   Form,
@@ -18,7 +19,6 @@ import {
   Select,
   DatePicker,
 } from "antd";
-import { Rule } from "antd/es/form";
 import type { FormProps } from "antd";
 import { MaskedInput } from "antd-mask-input";
 import type { Dayjs } from 'dayjs';
@@ -76,14 +76,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
   };
 
   return (
-    <Form name="profile-fizl" onFinish={onFinish} validateTrigger="onSubmit">
+    <Form name="profile-fiz" onFinish={onFinish} validateTrigger="onSubmit">
       <p className="profile-editor-title h3">
         {typeof profile == "undefined" ? "Создание" : "Редактирование"} профилия
         физ.л
       </p>
       <InputWrapper
         label="Название профиля*"
-        labelId="profile-fizl-profile_name"
+        labelId="profile-fiz-profile_name"
       >
         <Form.Item<FieldType>
           name="profile_name"
@@ -94,14 +94,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         >
           <Input
             type="text"
-            placeholder="Название профиля"
-            id="profile-fizl-profile_name"
+            placeholder="Название профиля*"
+            id="profile-fiz-profile_name"
           />
         </Form.Item>
       </InputWrapper>
       <Row gutter={[16, 8]}>
         <Col span={24} sm={12} lg={8}>
-          <InputWrapper label="Имя *" id="profile-fizl-first_name">
+          <InputWrapper label="Имя *" id="profile-fiz-first_name">
             <Form.Item<FieldType>
               name="person_r_name"
               rules={[
@@ -113,14 +113,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-first_name"
+                id="profile-fiz-first_name"
                 placeholder="Имя"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} sm={12} lg={8}>
-          <InputWrapper label="Фамилия *" id="profile-fizl-person_r_surname">
+          <InputWrapper label="Фамилия *" id="profile-fiz-person_r_surname">
             <Form.Item<FieldType>
               name="person_r_surname"
               rules={[
@@ -132,14 +132,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-last_name"
+                id="profile-fiz-last_name"
                 placeholder="Фамилия"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} lg={8}>
-          <InputWrapper label="Отчество" id="profile-fizl-person_r_patronimic">
+          <InputWrapper label="Отчество" id="profile-fiz-person_r_patronimic">
             <Form.Item<FieldType>
               name="person_r_patronimic"
               rules={[
@@ -153,7 +153,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-second_name"
+                id="profile-fiz-second_name"
                 placeholder="Отчество"
               />
             </Form.Item>
@@ -162,7 +162,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
       </Row>
       <Row gutter={[16, 8]}>
         <Col span={24} lg={12}>
-          <InputWrapper label="Email *" id="profile-fizl-email">
+          <InputWrapper label="Email *" id="profile-fiz-email">
             <Form.Item<FieldType>
               name="email"
               rules={[
@@ -172,12 +172,12 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
               ]}
               initialValue={profile?.email}
             >
-              <Input id="profile-fizl-email" type="email" placeholder="Email" />
+              <Input id="profile-fiz-email" type="email" placeholder="Email" />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} lg={12}>
-          <InputWrapper label="Телефон *" id="profile-fizl-phone">
+          <InputWrapper label="Телефон *" id="profile-fiz-phone">
             <Form.Item<FieldType>
               name="phone"
               rules={[
@@ -193,7 +193,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
                     lazy: false,
                   },
                 ]}
-                id="profile-fizl-phone"
+                id="profile-fiz-phone"
                 type="tel"
                 placeholder="Телефон"
               />
@@ -201,7 +201,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
           </InputWrapper>
         </Col>
       </Row>
-      <InputWrapper id="profile-fizl-country">
+      <InputWrapper id="profile-fiz-country">
         <Form.Item<FieldType>
           name="country"
           rules={[{ required: true, message: "Небходимо выбрать страну" }]}
@@ -211,7 +211,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
           hidden
         >
           <Select
-            id="profile-fizl-country"
+            id="profile-fiz-country"
             placeholder="Выберите страну"
             style={{ width: "100%" }}
             options={[
@@ -224,7 +224,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         <Col span={24} sm={12} lg={8}>
           <InputWrapper
             label="Серия пасорта"
-            id="profile-fizl-passpor_serial_number"
+            id="profile-fiz-passpor_serial_number"
           >
             <Form.Item<FieldType>
               name="passport_series"
@@ -238,7 +238,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-passpor_serial_number"
+                id="profile-fiz-passpor_serial_number"
                 placeholder="Серия"
               />
             </Form.Item>
@@ -247,7 +247,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         <Col span={24} sm={12} lg={8}>
           <InputWrapper
             label="Номер паспорта"
-            id="profile-fizl-passpor_number"
+            id="profile-fiz-passpor_number"
           >
             <Form.Item<FieldType>
               name="passport_number"
@@ -261,20 +261,20 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-passpor_number"
+                id="profile-fiz-passpor_number"
                 placeholder="Номер"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} sm={12} lg={8}>
-          <InputWrapper label="Дата рождения" id="profile-fizl-birth_date">
+          <InputWrapper label="Дата рождения" id="profile-fiz-birth_date">
             <Form.Item<FieldType>
               name="birth_date"
               initialValue={typeof profile?.birth_date != undefined && profile?.birth_date != null ? dayjs(profile?.birth_date) : undefined}
             >
               <DatePicker
-                id="profile-fizl-birth_date"
+                id="profile-fiz-birth_date"
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -285,21 +285,21 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         <Col span={24} lg={12}>
           <InputWrapper
             label="Дата выдачи паспорта"
-            id="profile-fizl-passport_date"
+            id="profile-fiz-passport_date"
           >
             <Form.Item<FieldType>
               name="passport_date"
               initialValue={typeof profile?.passport_date && profile?.passport_date != null ? dayjs(profile?.passport_date) : undefined}
             >
               <DatePicker
-                id="profile-fizl-passport_date"
+                id="profile-fiz-passport_date"
                 style={{ width: "100%" }}
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} lg={12}>
-          <InputWrapper label="Кем выдан" id="profile-fizl-passport_place">
+          <InputWrapper label="Кем выдан" id="profile-fiz-passport_place">
             <Form.Item<FieldType>
               name="passport_place"
               rules={[
@@ -313,7 +313,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
               <Input
                 type="text"
                 placeholder="Кем выдан"
-                id="profile-fizl-passport_place"
+                id="profile-fiz-passport_place"
               />
             </Form.Item>
           </InputWrapper>
@@ -321,7 +321,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
       </Row>
       <Row gutter={[16, 8]}>
         <Col span={24} sm={12} lg={8}>
-          <InputWrapper label="Индекс" id="profile-fizl-p_addr_zip">
+          <InputWrapper label="Индекс" id="profile-fiz-p_addr_zip">
             <Form.Item<FieldType>
               name="p_addr_zip"
               rules={[
@@ -332,14 +332,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-p_addr_zip"
+                id="profile-fiz-p_addr_zip"
                 placeholder="Индекс"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} sm={12} lg={8}>
-          <InputWrapper label="Город" id="profile-fizl-p_addr_city">
+          <InputWrapper label="Город" id="profile-fiz-p_addr_city">
             <Form.Item<FieldType>
               name="p_addr_city"
               rules={[
@@ -353,14 +353,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-p_addr_city"
+                id="profile-fiz-p_addr_city"
                 placeholder="Город"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
         <Col span={24} lg={8}>
-          <InputWrapper label="Область" id="profile-fizl-p_addr_area">
+          <InputWrapper label="Область" id="profile-fiz-p_addr_area">
             <Form.Item<FieldType>
               name="p_addr_area"
               rules={[
@@ -374,14 +374,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             >
               <Input
                 type="text"
-                id="profile-fizl-p_addr_area"
+                id="profile-fiz-p_addr_area"
                 placeholder="Область"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
       </Row>
-      <InputWrapper label="Адрес" id="profile-fizl-p_addr_addr">
+      <InputWrapper label="Адрес" id="profile-fiz-p_addr_addr">
         <Form.Item<FieldType>
           name="p_addr_addr"
           rules={[
@@ -392,12 +392,12 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         >
           <Input
             type="text"
-            id="profile-fizl-p_addr_addr"
+            id="profile-fiz-p_addr_addr"
             placeholder="Адрес"
           />
         </Form.Item>
       </InputWrapper>
-      <InputWrapper label="Получатель" id="profile-fizl-p_addr_recipient">
+      <InputWrapper label="Получатель" id="profile-fiz-p_addr_recipient">
         <Form.Item<FieldType>
           name="p_addr_recipient"
           rules={[
@@ -411,7 +411,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
         >
           <Input
             type="text"
-            id="profile-fizl-p_addr_recipient"
+            id="profile-fiz-p_addr_recipient"
             placeholder="Получатель"
           />
         </Form.Item>

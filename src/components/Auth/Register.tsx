@@ -27,7 +27,7 @@ type FieldType = {
 const MIN_PASSWORD_LENGTH = 8;
 
 export default function Register() {
-    const [typeUser, setTypeUser] = useState<TypeUser>('fizl');
+    const [typeUser, setTypeUser] = useState<TypeUser>('fiz');
     const [password, setPassword] = useState<string>();
     const [passwordStrength, setPasswordStrength] = useState<number>(0);
     const router = useRouter();
@@ -145,12 +145,12 @@ export default function Register() {
                     <div className='input-wrapper'>
                         <Form.Item name="typeUser" initialValue={typeUser}>
                             <Radio.Group onChange={onChangeTypeUser} >
-                                <Radio.Button value={'fizl'} >Физическое лицо</Radio.Button>
+                                <Radio.Button value={'fiz'} >Физическое лицо</Radio.Button>
                                 <Radio.Button value={'uril'} >Юридическое лицо</Radio.Button>
                             </Radio.Group>
                         </Form.Item>
                     </div>
-                    <InputWrapper label={ typeUser == 'fizl' ? "Логин" : "Юридическое лицо"} labelId="register_login">
+                    <InputWrapper label={ typeUser == 'fiz' ? "Логин" : "Юридическое лицо"} labelId="register_login">
                         <Form.Item<FieldType>
                         name="login"
                         rules={[
@@ -158,7 +158,7 @@ export default function Register() {
                             {max: 50, message: "Минимальный размер логина должен быть 50"}
                         ]}
                         >   
-                                <Input placeholder={ typeUser == 'fizl' ? "Логин" : "Юридическое лицо"} id="register_login" classNames={{
+                                <Input placeholder={ typeUser == 'fiz' ? "Логин" : "Юридическое лицо"} id="register_login" classNames={{
                                     'input': 'input'
                                 }} type="text"
                                 />

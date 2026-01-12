@@ -1,10 +1,10 @@
-export type TypeUser = 'fizl' | 'uril';
+export type TypeUser = 'fiz' | 'url';
 
 export function getTranslateTypeUser(typeUser: TypeUser): string | never {
     switch(typeUser) {
-        case ('fizl'):
+        case ('fiz'):
             return 'физ.л';
-        case ('uril'):
+        case ('url'):
             return 'юр.л';
     }
 
@@ -31,5 +31,5 @@ export interface IUser {
 }
 
 export function isTypeUser(obj: unknown): obj is TypeUser {
-    return obj === 'fizl' || obj === 'uril'; 
+    return obj === 'fiz' || obj === 'url'; 
 }

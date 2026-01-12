@@ -25,7 +25,7 @@ export default function ModalProfileEditor({profile, typeUser, handleUpdate, mod
 
     //Выбор тип профиля 
     const printTUser = () => {
-        const tUserList: Array<TypeUser> = ['fizl', 'uril'];
+        const tUserList: Array<TypeUser> = ['fiz', 'url'];
 
         return <div className="profile-editor">
             {
@@ -50,11 +50,11 @@ export default function ModalProfileEditor({profile, typeUser, handleUpdate, mod
         }}
     >
         { typeof tUser == 'undefined' && printTUser() }
-        { tUser == 'fizl' && <div>
+        { tUser == 'fiz' && <div>
             <ProfileEditorIndividual profile={profile as IProfileFiz | undefined} handleUpdate={handleUpdate}  handleClouseModal={() => setModalOpen(false)} />
         </div> }
-        { tUser == 'uril' && <div>
-            <ProfileEditoroOganization />
+        { tUser == 'url' && <div>
+            <ProfileEditoroOganization profile={profile as IProfileUrl | undefined} handleUpdate={handleUpdate} handleClouseModal={() => setModalOpen(false)} />
         </div> }
     </Modal>
 }

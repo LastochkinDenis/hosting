@@ -26,7 +26,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
 
     const setDefaultProfile = () => {
 
-        const updateRequst = typeUser == 'fizl' ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
+        const updateRequst = typeUser == 'fiz' ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
             is_default: !profile.is_default
         }) : instance.put(PROFILES_ORGANIZATION_UPDATE(profile.id.toString()), {
             is_default: !profile.is_default
@@ -54,7 +54,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
     }
 
     const handleDeleteProfile = () => {
-        const deleteRequst =  typeUser == 'fizl' ? 
+        const deleteRequst =  typeUser == 'fiz' ? 
         instance.delete(PROFILES_INDIVIDUAL_DELETE(profile.id.toString())) :
         instance.delete(PROFILES_ORGANIZATION_DELETE(profile.id.toString()));
 
@@ -110,7 +110,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
                     !profile.is_default &&
                     <Popconfirm
                         placement='top'
-                        title={`Установить профиль по умолчанию для ${typeUser == 'fizl' ? 'физ.л' : 'юр.л'}`}
+                        title={`Установить профиль по умолчанию для ${typeUser == 'fiz' ? 'физ.л' : 'юр.л'}`}
                         onConfirm={setDefaultProfile}
                         okText='Да'
                         cancelText='Нет'
