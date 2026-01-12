@@ -32,13 +32,12 @@ type FieldType = Fields<IProfileFiz>;;
 
 interface IProps {
   profile?: IProfileFiz;
-  handleUpdate: () => void
+  handleUpdate: () => void;
+  handleClouseModal?: () => void;
 }
 
-export default function ProfileEditorIndividual({ profile, handleUpdate }: IProps) {
+export default function ProfileEditorIndividual({ profile, handleUpdate, handleClouseModal}: IProps) {
   const { pushNotification } = useNotificationStore();
-
-  console.log(profile);
   
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
 
@@ -48,17 +47,20 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
             ...values,
             birth_date: values.birth_date?.format('YYYY-MM-DD') ?? null,
             passport_date: values.passport_date?.format('YYYY-MM-DD') ?? null,
-            is_default: false
-        })
-        : instance.post(PROFILES_INDIVIDUAL, {
+          })
+          : instance.post(PROFILES_INDIVIDUAL, {
             ...values,
             birth_date: values.birth_date?.format('YYYY-MM-DD') ?? null,
             passport_date: values.passport_date?.format('YYYY-MM-DD') ?? null,
+            is_default: false
         });
 
     requestProfilesIndividual
     .then(respnse => {
         handleUpdate();
+        
+        if (typeof handleClouseModal != 'undefined') handleClouseModal();
+
         pushNotification({
             messeage: `${typeof profile == "undefined" ? "Профиль создан" : "Профиль обновлен"}`,
             type: 'success'
@@ -71,19 +73,6 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
             type: 'error'
         })
     })
-  };
-
-  const validatePassporSerialNumber = (
-    rule: Rule,
-    value: string,
-    callback: () => void
-  ) => {
-    // Прядовращает другие проврки так как поле не обязательное и пустое
-    if ("____ ______" == value || "" == value || typeof value == "undefined" || value == null)
-      return Promise.resolve();
-
-    if (!/\d{4} \d{6}/.test(value)) return Promise.reject();
-    return Promise.resolve();
   };
 
   const validatePhone = (rule: Rule, value: string, callback: () => void) => {
@@ -218,13 +207,14 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
           </InputWrapper>
         </Col>
       </Row>
-      <InputWrapper label="Страна" id="profile-fizl-country">
+      <InputWrapper id="profile-fizl-country">
         <Form.Item<FieldType>
           name="country"
           rules={[{ required: true, message: "Небходимо выбрать страну" }]}
           initialValue={
             typeof profile == "undefined" ? "Россия" : profile.country
           }
+          hidden
         >
           <Select
             id="profile-fizl-country"
@@ -232,41 +222,58 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
             style={{ width: "100%" }}
             options={[
               { label: "Россия", value: "RU" },
-              { label: "Казастан", value: "KZ" },
             ]}
           />
         </Form.Item>
       </InputWrapper>
       <Row gutter={[16, 8]}>
-        <Col span={24} lg={12}>
+        <Col span={24} sm={12} lg={8}>
           <InputWrapper
-            label="Серия и номер паспорта"
+            label="Серия пасорта"
             id="profile-fizl-passpor_serial_number"
           >
             <Form.Item<FieldType>
               name="passport_series"
               rules={[
                 {
-                  validator: validatePassporSerialNumber,
-                  message: "Некорректные паспортные данные",
+                  pattern: /\d{4}/,
+                  message: "Некорректная серия паспорта",
                 },
               ]}
               initialValue={profile?.passport_series}
             >
-              <MaskedInput
-                mask={[
-                  {
-                    mask: "0000 000000",
-                    lazy: false,
-                  },
-                ]}
+              <Input
                 type="text"
                 id="profile-fizl-passpor_serial_number"
+                placeholder="Серия"
               />
             </Form.Item>
           </InputWrapper>
         </Col>
-        <Col span={24} lg={12}>
+        <Col span={24} sm={12} lg={8}>
+          <InputWrapper
+            label="Номер паспорта"
+            id="profile-fizl-passpor_number"
+          >
+            <Form.Item<FieldType>
+              name="passport_number"
+              rules={[
+                {
+                  pattern: /\d{6}/,
+                  message: "Некорректный номер паспорта",
+                },
+              ]}
+              initialValue={profile?.passport_number}
+            >
+              <Input
+                type="text"
+                id="profile-fizl-passpor_number"
+                placeholder="Номер"
+              />
+            </Form.Item>
+          </InputWrapper>
+        </Col>
+        <Col span={24} sm={12} lg={8}>
           <InputWrapper label="Дата рождения" id="profile-fizl-birth_date">
             <Form.Item<FieldType>
               name="birth_date"

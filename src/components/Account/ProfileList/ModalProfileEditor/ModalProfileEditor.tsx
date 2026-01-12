@@ -51,7 +51,7 @@ export default function ModalProfileEditor({profile, typeUser, handleUpdate, mod
     >
         { typeof tUser == 'undefined' && printTUser() }
         { tUser == 'fizl' && <div>
-            <ProfileEditorIndividual profile={profile as IProfileFiz | undefined} handleUpdate={handleUpdate} />
+            <ProfileEditorIndividual profile={profile as IProfileFiz | undefined} handleUpdate={handleUpdate}  handleClouseModal={() => setModalOpen(false)} />
         </div> }
         { tUser == 'uril' && <div>
             <ProfileEditoroOganization />
