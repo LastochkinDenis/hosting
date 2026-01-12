@@ -57,6 +57,7 @@
             cursor: pointer;
             position: relative;
             display: block;
+            border-bottom: 1px solid var(--text-color-third);
 
             &--wrapper:first-child {
                 border-top: 1px solid var(--text-color-third);

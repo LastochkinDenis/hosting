@@ -5,9 +5,9 @@ import { instance } from "@/lib/axios_settings";
 import { useNotificationStore } from "@/store/notificationStrore";
 import {
   PROFILES_INDIVIDUAL,
-  PROFILES_INDIVIDUAL_DELETE,
   PROFILES_INDIVIDUAL_UPDATE,
 } from "@/lib/api_endpoint";
+import { validatePhone } from "@/lib/validators";
 
 import {
   Form,
@@ -58,7 +58,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
     requestProfilesIndividual
     .then(respnse => {
         handleUpdate();
-        
+
         if (typeof handleClouseModal != 'undefined') handleClouseModal();
 
         pushNotification({
@@ -73,12 +73,6 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
             type: 'error'
         })
     })
-  };
-
-  const validatePhone = (rule: Rule, value: string, callback: () => void) => {
-    if (!/^\(\+7\) \d{3} \d{3}-\d\d-\d\d/.test(value)) return Promise.reject();
-
-    return Promise.resolve();
   };
 
   return (
