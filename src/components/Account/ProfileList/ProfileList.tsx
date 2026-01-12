@@ -14,10 +14,6 @@ export default function AccountList() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
 
-    useEffect(() => {
-        getDataProfile();
-    }, []);
-
     const getDataProfile = async () => {
         const profilesRequst:Array<IProfile> = [];
 
@@ -47,6 +43,12 @@ export default function AccountList() {
 
         setPrefiels(profilesRequst);
     }
+
+    useEffect(() => {
+        (async () => {
+            await getDataProfile();
+        })();
+    }, []);
     
     return <div className="profile-editor">
         <div className="profile-editor__header">

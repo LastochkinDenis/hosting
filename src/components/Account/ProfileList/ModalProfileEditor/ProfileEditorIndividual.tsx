@@ -21,8 +21,14 @@ import {
 import { Rule } from "antd/es/form";
 import type { FormProps } from "antd";
 import { MaskedInput } from "antd-mask-input";
+import type { Dayjs } from 'dayjs';
+import dayjs from "dayjs";
 
-type FieldType = Omit<IProfileFiz, "created_at" | "updated_at">;
+type Fields<T> = {
+  [P in keyof T as Exclude<P, "created_at" | "updated_at">]: T[P] extends Date ? Dayjs : T[P]
+};
+
+type FieldType = Fields<IProfileFiz>;;
 
 interface IProps {
   profile?: IProfileFiz;
@@ -30,39 +36,41 @@ interface IProps {
 }
 
 export default function ProfileEditorIndividual({ profile, handleUpdate }: IProps) {
-    const { pushNotification } = useNotificationStore();
+  const { pushNotification } = useNotificationStore();
 
+  console.log(profile);
+  
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
 
-    console.log(values.birth_date);
-    console.log(typeof values.birth_date);
+    const requestProfilesIndividual =
+      typeof profile != "undefined"
+        ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
+            ...values,
+            birth_date: values.birth_date?.format('YYYY-MM-DD') ?? null,
+            passport_date: values.passport_date?.format('YYYY-MM-DD') ?? null,
+            is_default: false
+        })
+        : instance.post(PROFILES_INDIVIDUAL, {
+            ...values,
+            birth_date: values.birth_date?.format('YYYY-MM-DD') ?? null,
+            passport_date: values.passport_date?.format('YYYY-MM-DD') ?? null,
+        });
 
-
-    // const requestProfilesIndividual =
-    //   typeof profile != "undefined"
-    //     ? instance.put(PROFILES_INDIVIDUAL_UPDATE(profile.id.toString()), {
-    //         ...values,
-    //         is_default: false
-    //     })
-    //     : instance.post(PROFILES_INDIVIDUAL, {
-    //         ...values
-    //     });
-
-    // requestProfilesIndividual
-    // .then(respnse => {
-    //     handleUpdate();
-    //     pushNotification({
-    //         messeage: `${typeof profile == "undefined" ? "Профиль создан" : "Профиль обновлен"}`,
-    //         type: 'success'
-    //     })
-    // })
-    // .catch(e => {
-    //     console.log(e);
-    //     pushNotification({
-    //         messeage: `${typeof profile == "undefined" ? "Ошибка создания профиля" : "Ошибка обновление профиля"}`,
-    //         type: 'error'
-    //     })
-    // })
+    requestProfilesIndividual
+    .then(respnse => {
+        handleUpdate();
+        pushNotification({
+            messeage: `${typeof profile == "undefined" ? "Профиль создан" : "Профиль обновлен"}`,
+            type: 'success'
+        })
+    })
+    .catch(e => {
+        console.log(e);
+        pushNotification({
+            messeage: `${typeof profile == "undefined" ? "Ошибка создания профиля" : "Ошибка обновление профиля"}`,
+            type: 'error'
+        })
+    })
   };
 
   const validatePassporSerialNumber = (
@@ -262,7 +270,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
           <InputWrapper label="Дата рождения" id="profile-fizl-birth_date">
             <Form.Item<FieldType>
               name="birth_date"
-              initialValue={profile?.birth_date}
+              initialValue={typeof profile?.birth_date != undefined && profile?.birth_date != null ? dayjs(profile?.birth_date) : undefined}
             >
               <DatePicker
                 id="profile-fizl-birth_date"
@@ -280,7 +288,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate }: IProp
           >
             <Form.Item<FieldType>
               name="passport_date"
-              initialValue={profile?.passport_date}
+              initialValue={typeof profile?.passport_date && profile?.passport_date != null ? dayjs(profile?.passport_date) : undefined}
             >
               <DatePicker
                 id="profile-fizl-passport_date"
