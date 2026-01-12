@@ -27,3 +27,11 @@ export const PROFILES_INDIVIDUAL_UPDATE = (profile_id: string) => `/profiles/ind
 export const PROFILES_ORGANIZATION_UPDATE = (profile_id: string) => `/profiles/organization/${profile_id}`;
 export const PROFILES_INDIVIDUAL_DELETE = (profile_id: string) => `/profiles/individual/${profile_id}`;
 export const PROFILES_ORGANIZATION_DELETE = (profile_id: string) => `/profiles/organization/${profile_id}`;
+
+//BILLING
+export const BILLING_PLANS = '/billing/plans';
+export const BILLING_PLANS_BY_ID = (id: string) => `/billing/plans/${id}`;
+export const BILLING_SUBSCRIPTIONS_CURRENT = '/billing/subscriptions/current';
+export const BALANCE = '/billing/balance';
+export const BILLING_RESOURCES = '/billing/resources';
+export const BILLING_SUBSCRIPTIONS_LIMIT = '/billing/subscription/limits';

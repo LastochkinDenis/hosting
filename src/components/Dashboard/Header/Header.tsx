@@ -1,10 +1,10 @@
 'use client';
 import './Header.scss';
-import { mockDashboardData } from '@/lib/mockApi';
+import { useBalanceStore } from '@/store/balanceStore';
 import { useUIStore } from '@/store/uiStore';
 
 export default function Header() {
-  const balance = mockDashboardData.balance;
+  const { balance_rub } = useBalanceStore();
   const { isSidebarOpen, toggleSidebar } = useUIStore();
 
   return (
@@ -40,7 +40,7 @@ export default function Header() {
       <div className="dashboard-header__actions">
         <div className="dashboard-header__balance">
           <span className="dashboard-header__balance-label">Баланс:</span>
-          <span className="dashboard-header__balance-value">{balance.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽</span>
+          <span className="dashboard-header__balance-value">{balance_rub.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽</span>
           <button className="dashboard-header__balance-button">Пополнить</button>
         </div>
         {/* <div className="dashboard-header__divider"></div> */}

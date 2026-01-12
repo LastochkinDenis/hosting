@@ -80,7 +80,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
         <div className='editor__item'>
             <div className="editor__item-data">
                 <span>Проф. {getTranslateTypeUser(typeUser)}</span>
-                <span>{profile.profile_name}</span>
+                <span className='editor__item-name-profile'>{profile.profile_name}</span>
             </div>
             <div className="editor__item-buttons">
                 {

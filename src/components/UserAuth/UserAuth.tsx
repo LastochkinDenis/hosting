@@ -2,8 +2,9 @@
 
 import { useAuthStore } from "@/store/authStore";
 import { instance } from "@/lib/axios_settings";
-import { REFRESH_TOKEN, USER_ME } from "@/lib/api_endpoint";
+import { REFRESH_TOKEN, USER_ME, BALANCE } from "@/lib/api_endpoint";
 import { useUserStore } from "@/store/userStore";
+import { useBalanceStore } from '@/store/balanceStore';
 
 
 import React, { useEffect, useRef } from "react";
@@ -12,6 +13,7 @@ export default function UserAuth({children} : {children: React.ReactNode}) {
     const { isAuthenticated, token, refresh_token, logout, tokenUpdate } = useAuthStore();
     const { id, clearUserData }  = useUserStore();
     const tokenUpdated = useRef<boolean>(false);
+    const { changeBalance } = useBalanceStore();
     
     useEffect(() => {
         let expAcsses:number = 0;
@@ -20,7 +22,7 @@ export default function UserAuth({children} : {children: React.ReactNode}) {
         if(token !== null) {
             const expAcssesDate: number = JSON.parse(atob(token.split(".")[1]))['exp'];
             
-            expAcsses = Number(expAcssesDate) * 1000 - Number(Date.now()) - 60000;
+            expAcsses =  Number(expAcssesDate) * 1000 - Number(Date.now()) - 60000;
         }
 
         const timer = setTimeout(() => {
@@ -61,7 +63,7 @@ export default function UserAuth({children} : {children: React.ReactNode}) {
     }, [isAuthenticated, token, refresh_token]);
 
     useEffect(() => {
-        if(isAuthenticated && id == 0) {
+        if(isAuthenticated) {
             instance.get(USER_ME)
             .then(response => {
                 if(response.status != 200) {
@@ -76,7 +78,21 @@ export default function UserAuth({children} : {children: React.ReactNode}) {
                 console.log(e)
             })
         }
-    }, [isAuthenticated, id]);
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        if(isAuthenticated) {
+            instance.get(BALANCE)
+            .then(response => response.data)
+            .then(data => {
+                changeBalance(Number(data.balance_rub), data.currency, Number(data.hold_amount));
+            })
+            .catch(e => {
+                console.log(e);
+                changeBalance(0, 'RUB', 0);
+            })
+        }
+    }, [isAuthenticated]);
 
     //Если нет данных в localStorage инициализируем пустые значения
     useEffect(() => {

@@ -383,6 +383,18 @@ li {
           }
       }
   }
+  .editor {
+    &__item {
+      &-data,
+      &-add-record {
+        padding: 0.6rem 0.6rem 0.6rem 1.25rem;
+      }
+
+      &-buttons button {
+        padding: 0.6rem;
+      }
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
