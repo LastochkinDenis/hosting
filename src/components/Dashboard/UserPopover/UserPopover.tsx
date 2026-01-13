@@ -18,7 +18,7 @@ export default function UserPopover({ children }: { children: React.ReactNode })
 
     return <Popover
         styles={{...POPOVER_STYLE}}
-        trigger={'hover'}
+        // trigger={'hover'}
         placement='topRight'
         content={<ul className="popever">
             <li className="popever__item">

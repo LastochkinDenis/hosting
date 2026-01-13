@@ -1,0 +1,13 @@
+.current-subscription {
+    padding: 1.875rem;
+    border-radius: 1.875rem;
+    background-color: var(--background);
+    border: 1px solid #94a3b859;
+
+    &__top {
+        margin-bottom: 1.25rem;
+        gap: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+    }
+}
