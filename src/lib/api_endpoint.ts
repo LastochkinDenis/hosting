@@ -33,5 +33,5 @@ export const BILLING_PLANS = '/billing/plans';
 export const BILLING_PLANS_BY_ID = (id: string) => `/billing/plans/${id}`;
 export const BILLING_SUBSCRIPTIONS_CURRENT = '/billing/subscriptions/current';
 export const BALANCE = '/billing/balance';
-export const BILLING_RESOURCES = '/billing/resources';
-export const BILLING_SUBSCRIPTIONS_LIMIT = '/billing/subscription/limits';
+export const USED_RESOURCES = '/billing/resources';
+export const SUBSCRIPTIONS_LIMIT = '/billing/subscription/limits';

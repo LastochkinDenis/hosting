@@ -16,45 +16,6 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
-
-  &__item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.25rem;
-  }
-
-  &__label {
-    font-size: var(--font-size-14-16);
-    font-weight: 500;
-    color: #64748b;
-  }
-
-  &__value {
-    font-size: var(--font-size-14-16);
-    font-weight: 600;
-    color: #0f172a;
-  }
-
-  &__bar {
-    width: 100%;
-    background: #e2e8f0;
-    border-radius: 9999px;
-    height: 0.5rem;
-    overflow: hidden;
-  }
-
-  &__bar-fill {
-    height: 100%;
-    border-radius: 9999px;
-    transition: width 0.3s ease;
-  }
 }
 
 // Dark mode

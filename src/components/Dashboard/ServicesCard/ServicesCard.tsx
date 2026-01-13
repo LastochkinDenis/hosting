@@ -43,13 +43,13 @@ export default function ServicesCard() {
       <div className="services-card__content">
         <div className="services-card__item">
           <div className="services-card__info">
-            <p className="services-card__plan">{planData?.plan}</p>
+            <p className="services-card__plan">Активный тариф {planData?.plan}</p>
             { planData?.renewalDate != null && <p className="services-card__date">Продление: {planData?.renewalDate}</p> }
           </div>
           {
             planData?.status != null &&
-            <span className={`services-card__status services-card__status--${planData?.status === 'Активен' ? 'active' : 'inactive'}`}>
-              {planData?.status}
+            <span className={`services-card__status services-card__status--${planData?.status ? 'active' : 'inactive'}`}>
+              {planData?.status ? 'Активен' : 'Не активен'}
             </span>
           }
         </div>

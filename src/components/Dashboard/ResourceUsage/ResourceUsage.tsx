@@ -1,92 +1,89 @@
-'use client';
-import './ResourceUsage.scss';
-import { mockDashboardData } from '@/lib/mockApi';
+"use client";
+import "./ResourceUsage.scss";
+import { mockDashboardData } from "@/lib/mockApi";
+import ResourceUsageItem from "@/Ui/ResourceUsageItem/ResourceUsageItem";
+import { SUBSCRIPTIONS_LIMIT } from "@/lib/api_endpoint";
+import { instance } from "@/lib/axios_settings";
+import { TRANSLATE_RESOURCE_USAGE, UNIT_RESOURCE_USAGE } from '@/lib/constData';
+
+import { useState, useEffect } from "react";
+
+interface IResouseUsage {
+  [key: string]: {
+    title: string;
+    used: number;
+    limit: number;
+    unit: string;
+  };
+}
 
 export default function ResourceUsage() {
   const { disk, traffic, email, databases } = mockDashboardData.resources;
+  const [resourceUsege, setResourceUsage] = useState<IResouseUsage>({});
 
-  const getPercentage = (used: number, total: number) => {
-    return Math.round((used / total) * 100);
-  };
+  useEffect(() => {
+    instance
+      .get(SUBSCRIPTIONS_LIMIT)
+      .then((response) => response.data)
+      .then((data) => {
+        if ("subscription" in data && "resources_usage" in data) {
+          let resource = {};
 
-  const getStatusColor = (percentage: number) => {
-    if (percentage >= 80) return '#DE350B';
-    if (percentage >= 50) return '#FFAB00';
-    return '#135bec';
-  };
+          Object.entries(data.subscription.plan).forEach((item) => {
+            let [key, value] = item;
+
+            if (key == "price_rub" || key == "id" || key == "daily_price")
+              return;
+
+            if (value === 0 || typeof value != 'number') return;
+
+            key = key.replace(/_limit$|limit_|limit/, "").replace(/^max_/, '');
+
+            resource[key] = {
+              title: TRANSLATE_RESOURCE_USAGE[key] ?? '',
+              limit: value,
+              unit: UNIT_RESOURCE_USAGE[key] ?? ''
+            };
+          });
+
+          Object.entries(data.resources_usage).forEach(item => {
+            let [key, value] = item;
+
+            key = key.replace('used_', '');
+                      
+            if(!(key in resource)) return;
+
+            resource[key].used = Number(value);
+          })
+
+          setResourceUsage(resource);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   return (
     <div className="resource-usage">
       <h3 className="resource-usage__title">Использование ресурсов</h3>
       <div className="resource-usage__grid">
-        <div className="resource-usage__item">
-          <div className="resource-usage__header">
-            <span className="resource-usage__label">Диск</span>
-            <span className="resource-usage__value">
-              {disk.used} {disk.unit} / {disk.total} {disk.unit}
-            </span>
-          </div>
-          <div className="resource-usage__bar">
-            <div
-              className="resource-usage__bar-fill"
-              style={{
-                width: `${getPercentage(disk.used, disk.total)}%`,
-                backgroundColor: getStatusColor(getPercentage(disk.used, disk.total)),
-              }}
-            />
-          </div>
-        </div>
-        <div className="resource-usage__item">
-          <div className="resource-usage__header">
-            <span className="resource-usage__label">Трафик</span>
-            <span className="resource-usage__value">
-              {traffic.used} {traffic.unit} / {traffic.total} {traffic.unit}
-            </span>
-          </div>
-          <div className="resource-usage__bar">
-            <div
-              className="resource-usage__bar-fill"
-              style={{
-                width: `${getPercentage(traffic.used, traffic.total)}%`,
-                backgroundColor: getStatusColor(getPercentage(traffic.used, traffic.total)),
-              }}
-            />
-          </div>
-        </div>
-        <div className="resource-usage__item">
-          <div className="resource-usage__header">
-            <span className="resource-usage__label">Email-аккаунты</span>
-            <span className="resource-usage__value">
-              {email.used} / {email.total}
-            </span>
-          </div>
-          <div className="resource-usage__bar">
-            <div
-              className="resource-usage__bar-fill"
-              style={{
-                width: `${getPercentage(email.used, email.total)}%`,
-                backgroundColor: getStatusColor(getPercentage(email.used, email.total)),
-              }}
-            />
-          </div>
-        </div>
-        <div className="resource-usage__item">
-          <div className="resource-usage__header">
-            <span className="resource-usage__label">Базы данных</span>
-            <span className="resource-usage__value">
-              {databases.used} / {databases.total}
-            </span>
-          </div>
-          <div className="resource-usage__bar">
-            <div
-              className="resource-usage__bar-fill"
-              style={{
-                width: `${getPercentage(databases.used, databases.total)}%`,
-                backgroundColor: getStatusColor(getPercentage(databases.used, databases.total)),
-              }}
-            />
-          </div>
-        </div>
+        {Object.keys(resourceUsege).length > 0 &&
+          Object.entries(resourceUsege).map((item) => {
+            const [key, data] = item;
+            return (
+              <ResourceUsageItem
+                key={key}
+                title={data.title}
+                used={data.used}
+                limit={data.limit}
+                unit={data.unit}
+              />
+            );
+          })}
+        {Object.keys(resourceUsege).length == 0 && (
+          <p className="p2">Нет используемых ресурсов</p>
+        )}
       </div>
     </div>
   );
