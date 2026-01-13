@@ -1,9 +1,41 @@
 'use client';
 import './ServicesCard.scss';
 import { mockDashboardData } from '@/lib/mockApi';
+import { BILLING_SUBSCRIPTIONS_CURRENT } from '@/lib/api_endpoint';
+import { instance } from '@/lib/axios_settings';
+
+import { useState, useEffect } from 'react';
+import { isAxiosError } from 'axios';
+
+interface IPlanData { 
+  plan: string | null;
+  status: string | null;
+  renewalDate: string | null;
+}
 
 export default function ServicesCard() {
-  const { plan, renewalDate, status } = mockDashboardData.services;
+  const [ planData, setPlanData ] = useState<IPlanData>();
+
+  useEffect(() => {
+      instance.get(BILLING_SUBSCRIPTIONS_CURRENT)
+      .then(response => response.data)
+      .then(data => {
+        setPlanData({
+          plan: data.plan.name,
+          status: data.is_active,
+          renewalDate: data.end_date
+        });
+      })
+      .catch(e => {
+        if(isAxiosError(e)) {
+          setPlanData({
+            plan: JSON.parse(e.request.response).detail,
+            status: null,
+            renewalDate: null
+          });
+        }
+      });
+  }, []);
 
   return (
     <div className="services-card">
@@ -11,12 +43,15 @@ export default function ServicesCard() {
       <div className="services-card__content">
         <div className="services-card__item">
           <div className="services-card__info">
-            <p className="services-card__plan">{plan}</p>
-            <p className="services-card__date">Продление: {renewalDate}</p>
+            <p className="services-card__plan">{planData?.plan}</p>
+            { planData?.renewalDate != null && <p className="services-card__date">Продление: {planData?.renewalDate}</p> }
           </div>
-          <span className={`services-card__status services-card__status--${status === 'Активен' ? 'active' : 'inactive'}`}>
-            {status}
-          </span>
+          {
+            planData?.status != null &&
+            <span className={`services-card__status services-card__status--${planData?.status === 'Активен' ? 'active' : 'inactive'}`}>
+              {planData?.status}
+            </span>
+          }
         </div>
         <button className="services-card__button">Управлять</button>
       </div>
