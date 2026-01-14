@@ -3,6 +3,7 @@
     border-radius: 1.875rem;
     background-color: var(--background);
     border: 1px solid #94a3b859;
+    margin-bottom: 2rem;
 
     &__top {
         margin-bottom: 1.25rem;
@@ -10,4 +11,45 @@
         display: flex;
         justify-content: space-between;
     }
+
+    &__title {
+        color: var(--text-color-primary);
+    }
+
+    &__data-end {
+        color: var(--text-color-second);
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 15% 1fr;
+        gap: 1.25rem;
+    }
+
+    &__resourse-useage {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.625rem;
+    }
+
+    &__info {
+        &-item {
+            margin-bottom: 1.25rem;
+
+            &-title {
+                color: var(--text-color-primary);
+                margin-bottom: 0.625rem;
+                text-transform: uppercase;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+.subscription-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
 }

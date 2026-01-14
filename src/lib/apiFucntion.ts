@@ -44,7 +44,7 @@ export function getCurrentSubsctiption(): Promise<ICurrentSubscription> {
         }, data.resources_usage];
     })
     .then(data => {
-        let [subscription, usegeResurce] = data;
+        const [subscription, usegeResurce] = data;
 
         Object.entries(usegeResurce).forEach(item => {
             let [key, value] = item;

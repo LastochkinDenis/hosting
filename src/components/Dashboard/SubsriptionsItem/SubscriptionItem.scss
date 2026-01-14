@@ -1,0 +1,74 @@
+.subscription-item {
+  padding: 0.9375rem 0.75rem;
+  border-radius: 0.625rem;
+  border: 1px solid #94a3b859;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__title {
+    margin-bottom: 0.625rem;
+  }
+
+  &__resource {
+    margin-bottom: 0.9375rem;
+
+    &-item {
+      display: flex;
+      gap: 0.3125rem;
+      align-items: flex-end;
+      margin-bottom: 0.3125rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      &-name {
+        color: var(--text-color-second);
+      }
+
+      &-value {
+        color: var(--text-color-primary);
+        font-weight: 600;
+      }
+
+      span {
+        height: 1px;
+        overflow: hidden;
+        position: relative;
+        flex-grow: 1;
+
+        &::before {
+          content: "";
+          width: 100%;
+          height: 100%;
+          border: 3px dashed #94a3b859;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+      }
+    }
+  }
+
+  &__cost {
+    display: flex;
+    gap: 0.625rem;
+    margin-bottom: 0.9375rem;
+
+    &-title {
+        color: var(--text-color-second);
+        margin-bottom: 0.3125rem;
+        display: block;
+    }
+  }
+
+  &__price {
+    color: var(--text-color-primary);
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

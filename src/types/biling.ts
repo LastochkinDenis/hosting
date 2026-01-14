@@ -24,6 +24,16 @@ export interface ICurrentSubscription {
     }
 }
 
+export interface ISubscription {
+  id: number;
+  name: string;
+  price_rub: number;
+  daily_price: number;
+  isp_type: string;
+  is_active: boolean;
+  resource?: Record<string, number>
+}
+
 export const EMPTY_CURRENT_SUBSCRIPTION:ICurrentSubscription = {
   id: 0,
   is_active: false,
