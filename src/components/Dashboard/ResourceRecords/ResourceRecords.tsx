@@ -17,7 +17,7 @@ export default function ResourceRecords({ id } : {id : string}) {
     const { pushNotification } = useNotificationStore();
     const [tRecord, setTRecord] = useState<recordType | undefined>();
 
-    const getResourceRecords = () => {
+    useEffect(() => {
         instance.get(GET_DOMAIN_DNS(id))
         .then(response => {
             if(response.status != 200) {
@@ -35,12 +35,23 @@ export default function ResourceRecords({ id } : {id : string}) {
                 type: 'error'
             });
         })
-    }
-
-    useEffect(() => {
-        getResourceRecords();
     }, []);
-    
+
+    const handleUpdateRecord = (resourceRecord: IResourceRecords, type: 'update' | 'delete' = 'update') => {
+        if(type == 'update') {
+            setResourceRecords(prev => {
+                const indexUpdate = prev.findIndex(item => item.id == resourceRecord.id);
+
+                if(indexUpdate == -1) return [...prev, resourceRecord];
+
+                prev[indexUpdate] = {...resourceRecord};
+                
+                return prev;
+            });
+        } else {
+            setResourceRecords(prev => prev.filter(item => item.id != resourceRecord.id));
+        }
+    };    
 
     const handleRecordsClear = () => {
         Promise.all(resourceRecords.map(item => {
@@ -90,14 +101,14 @@ export default function ResourceRecords({ id } : {id : string}) {
                     <span className='editor__item-add-text'>Добавить запись</span>
                 </button>
                 {resourceRecords.map((item) => {
-                    return <ResourceRecordItem key={item.id} resourceRecords={item} updateRecords={() => getResourceRecords()}  />
+                    return <ResourceRecordItem key={item.id} resourceRecords={item} updateRecords={handleUpdateRecord}  />
                 })}
             </div>
         </div>
         {
             modalOpen && <ModalRecord 
             setIsOpen={(v) => setModalOpen(v)}
-            updateRecords={() => getResourceRecords()} />
+            updateRecords={handleUpdateRecord} />
         }
     </>
 }

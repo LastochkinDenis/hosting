@@ -15,7 +15,7 @@ import type { PopconfirmProps } from 'antd';
 
 interface IProps {
     resourceRecords: IResourceRecords,
-    updateRecords: () => void
+    updateRecords: (resourceRecord: IResourceRecords, type: 'update' | 'delete') => void
 }
 
 export default function ResourceRecordItem({ resourceRecords, updateRecords } : IProps) {
@@ -31,7 +31,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
     const handleDelete: PopconfirmProps['onConfirm'] = () => {
         instance.delete(DELETE_DNS_RECORD(resourceRecords.domain_id.toString(), resourceRecords.id.toString()))
         .then(() => {
-            updateRecords();
+            updateRecords(resourceRecords, 'delete');
             pushNotification({
                 messeage: `${resourceRecords.record_type} была удалена`,
                 type: 'success'
@@ -76,7 +76,7 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
             setIsOpen={(v:boolean) => setIsOpen(v)}
             type={resourceRecords.record_type}
             idRecord={resourceRecords.id.toString()}
-            updateRecords={() => updateRecords()}
+            updateRecords={updateRecords}
             dataRecord={{
                 'name': resourceRecords.name,
                 'value': resourceRecords.value,

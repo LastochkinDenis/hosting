@@ -21,6 +21,7 @@ import {
     fieldsByRecordType
 } from './modalRecordType'
 import { fieldsByRecord } from "./modalRecordTemplates";
+import { IResourceRecords } from "@/types/domain";
 
 import { Modal, Form, Input, Select } from "antd"
 import type { FormProps } from "antd";
@@ -29,7 +30,7 @@ import { useState, useContext } from "react";
 
 interface IProps {
     setIsOpen: (v: boolean) => void;
-    updateRecords: () => void;
+    updateRecords: (resourceRecord: IResourceRecords, type: 'update' | 'delete') => void;
     idRecord?: string;
     type?: recordType;
     dataRecord?: IDataFieldServer
@@ -138,7 +139,7 @@ export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, 
         
         handleDnsChange
         .then(response => {
-            updateRecords();
+            updateRecords(response.data, 'update');
             pushNotification({
                 messeage: `Запись ${recordT} успешно ${typeof idRecord == 'undefined' ? 'добавлена' : 'изменина' }`,
                 type: 'success'
@@ -152,7 +153,7 @@ export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, 
             });
         })
         .finally(() => {
-            setIsload(true);
+            setIsload(false);
         })
 
     }
