@@ -4,6 +4,7 @@ import { MODAL_PADDING, MODAL_WIDTH } from "@/lib/styleConst";
 import InputWrapper from "@/Ui/Input/InputWrapper";
 import { instance } from "@/lib/axios_settings";
 import { DomenContext } from "@/app/(dashboard)/dashboard/[id]/dns/page";
+import { ResourceRecordsContext } from "../ResourceRecords"; 
 import { CREATE_DNS_RECORD, UPDATE_DNS_RECORD } from '@/lib/api_endpoint'
 import { useNotificationStore } from '@/store/notificationStrore'
 import '../ResourceRecords.scss';
@@ -29,18 +30,18 @@ import { Rule } from 'antd/es/form';
 import { useState, useContext } from "react";
 
 interface IProps {
-    setIsOpen: (v: boolean) => void;
-    updateRecords: (resourceRecord: IResourceRecords, type: 'update' | 'delete') => void;
+    setIsOpen: (v: boolean) => void;    
     idRecord?: string;
     type?: recordType;
     dataRecord?: IDataFieldServer
 }
 
-export default function ModalRecord( {setIsOpen, type, idRecord, updateRecords, dataRecord}: IProps ) {
+export default function ModalRecord( {setIsOpen, type, idRecord, dataRecord}: IProps ) {
     const [recordT, setRecordT] = useState<recordType | undefined>(type);
     const [isLoad, setIsload] = useState<boolean>(false);
     const {domen, id} = useContext(DomenContext);
     const { pushNotification } = useNotificationStore();
+    const updateRecords = useContext(ResourceRecordsContext);
 
     const renderChooseRecordT = () => {
         if(typeof recordT !== 'undefined') return undefined;

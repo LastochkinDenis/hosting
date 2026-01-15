@@ -1,25 +1,25 @@
 'use client';
 import { instance } from "@/lib/axios_settings";
 import { PROFILES_INDIVIDUAL_UPDATE, PROFILES_ORGANIZATION_UPDATE } from "@/lib/api_endpoint";
-import { IProfileFiz, IProfileUrl } from "../Profile";
+import { IProfile, IProfileFiz, IProfileUrl } from "../Profile";
 import { TypeUser, getTranslateTypeUser } from "@/types/user";
 import { MODAL_WIDTH, MODAL_PADDING } from "@/lib/styleConst";
 import './ModalProfileEditor.scss';
 import ProfileEditorIndividual from "./ProfileEditorIndividual";
 import ProfileEditoroOganization from "./ProfileEditoroOganization";
+import { ProfileContext } from "../ProfileList";
 
 import { Modal } from "antd";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 interface IProps {
     profile?: IProfileFiz | IProfileUrl;
     typeUser?: TypeUser;
     modalOpen: boolean;
     setModalOpen: (v: boolean) => void;
-    handleUpdate: () => void;
 }
 
-export default function ModalProfileEditor({profile, typeUser, handleUpdate, modalOpen, setModalOpen} : IProps) {
+export default function ModalProfileEditor({profile, typeUser, modalOpen, setModalOpen} : IProps) {
 
     const [tUser, setTUser] = useState<TypeUser | undefined>(typeUser);
 
@@ -51,10 +51,10 @@ export default function ModalProfileEditor({profile, typeUser, handleUpdate, mod
     >
         { typeof tUser == 'undefined' && printTUser() }
         { tUser == 'fiz' && <div>
-            <ProfileEditorIndividual profile={profile as IProfileFiz | undefined} handleUpdate={handleUpdate}  handleClouseModal={() => setModalOpen(false)} />
+            <ProfileEditorIndividual profile={profile as IProfileFiz | undefined} handleClouseModal={() => setModalOpen(false)} />
         </div> }
         { tUser == 'url' && <div>
-            <ProfileEditoroOganization profile={profile as IProfileUrl | undefined} handleUpdate={handleUpdate} handleClouseModal={() => setModalOpen(false)} />
+            <ProfileEditoroOganization profile={profile as IProfileUrl | undefined} handleClouseModal={() => setModalOpen(false)} />
         </div> }
     </Modal>
 }

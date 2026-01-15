@@ -1,5 +1,6 @@
 "use client";
-import { IProfileUrl } from "../Profile";
+import "./ModalProfileEditor.scss";
+import { IProfileUrl, IProfile } from "../Profile";
 import InputWrapper from "@/Ui/Input/InputWrapper";
 import { instance } from "@/lib/axios_settings";
 import { useNotificationStore } from "@/store/notificationStrore";
@@ -8,7 +9,7 @@ import {
   PROFILES_ORGANIZATION_UPDATE,
 } from "@/lib/api_endpoint";
 import { validatePhone } from "@/lib/validators";
-import "./ModalProfileEditor.scss";
+import { ProfileContext } from "../ProfileList";
 
 import {
   Form,
@@ -23,10 +24,10 @@ import type { FormProps } from "antd";
 import { MaskedInput } from "antd-mask-input";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+import { useContext } from "react";
 
 interface IProps {
   profile?: IProfileUrl;
-  handleUpdate: () => void;
   handleClouseModal?: () => void;
 }
 
@@ -34,10 +35,10 @@ type FieldType = Omit<IProfileUrl, "created_at" | "updated_at">;
 
 export default function ProfileEditoroOganization({
   profile,
-  handleUpdate,
   handleClouseModal,
 }: IProps) {
   const { pushNotification } = useNotificationStore();
+  const handleUpdate = useContext(ProfileContext);
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
     const requstProfile =
@@ -52,7 +53,7 @@ export default function ProfileEditoroOganization({
 
     requstProfile
       .then((response) => {
-        handleUpdate();
+        handleUpdate({typeProfile: 'url', 'profile_data': response.data}, 'update');
 
         if (typeof handleClouseModal != "undefined") handleClouseModal();
 

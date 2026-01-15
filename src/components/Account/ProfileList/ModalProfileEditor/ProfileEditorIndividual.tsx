@@ -1,5 +1,5 @@
 'use clinet';
-import { IProfileFiz } from "../Profile";
+import { IProfileFiz, IProfile } from "../Profile";
 import InputWrapper from "@/Ui/Input/InputWrapper";
 import { instance } from "@/lib/axios_settings";
 import { useNotificationStore } from "@/store/notificationStrore";
@@ -9,6 +9,7 @@ import {
 } from "@/lib/api_endpoint";
 import { validatePhone } from "@/lib/validators";
 import './ModalProfileEditor.scss';
+import { ProfileContext } from "../ProfileList";
 
 import {
   Form,
@@ -23,6 +24,7 @@ import type { FormProps } from "antd";
 import { MaskedInput } from "antd-mask-input";
 import type { Dayjs } from 'dayjs';
 import dayjs from "dayjs";
+import { useContext } from "react";
 
 type Fields<T> = {
   [P in keyof T as Exclude<P, "created_at" | "updated_at">]: T[P] extends Date ? Dayjs : T[P]
@@ -32,12 +34,12 @@ type FieldType = Fields<IProfileFiz>;;
 
 interface IProps {
   profile?: IProfileFiz;
-  handleUpdate: () => void;
   handleClouseModal?: () => void;
 }
 
-export default function ProfileEditorIndividual({ profile, handleUpdate, handleClouseModal}: IProps) {
+export default function ProfileEditorIndividual({ profile, handleClouseModal}: IProps) {
   const { pushNotification } = useNotificationStore();
+  const handleUpdate = useContext(ProfileContext);
   
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
 
@@ -57,7 +59,7 @@ export default function ProfileEditorIndividual({ profile, handleUpdate, handleC
 
     requestProfilesIndividual
     .then(respnse => {
-        handleUpdate();
+        handleUpdate({typeProfile: 'fiz', profile_data: respnse.data}, 'update');
 
         if (typeof handleClouseModal != 'undefined') handleClouseModal();
 

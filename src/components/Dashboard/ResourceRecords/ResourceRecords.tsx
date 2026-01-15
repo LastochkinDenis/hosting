@@ -7,9 +7,11 @@ import ResourceRecordItem from '@/components/Dashboard/ResourceRecords/ResourceR
 import ModalRecord from './ModalRecord/ModalRecord';
 import { useNotificationStore } from '@/store/notificationStrore';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { Popconfirm } from 'antd'
 import type { PopconfirmProps } from 'antd';
+
+export const ResourceRecordsContext = createContext((resourceRecord: IResourceRecords, type: 'update' | 'delete') => {});
 
 export default function ResourceRecords({ id } : {id : string}) {
     const [resourceRecords, setResourceRecords] = useState<Array<IResourceRecords>>([]);
@@ -78,37 +80,38 @@ export default function ResourceRecords({ id } : {id : string}) {
     }
 
     return <>
-        <div className="nss-editor">
-            <div className="nss-editor__header">
-                <p className="nss-editor__title h2">Ресурсные записи</p>
-                <Popconfirm
-                    placement='topLeft'
-                    title = 'Отчиска всей зоны'
-                    description = 'Вы уверены что хотете удалить все записи?'
-                    okText='Да'
-                    cancelText='Нет'
-                    onConfirm={handleRecordsClear}
-                >
-                    <button className="btn">
-                        <span className="material-symbols-outlined">delete</span>
-                        Очистить зону
+        <ResourceRecordsContext value={handleUpdateRecord}>
+            <div className="nss-editor">
+                <div className="nss-editor__header">
+                    <p className="nss-editor__title h2">Ресурсные записи</p>
+                    <Popconfirm
+                        placement='topLeft'
+                        title = 'Отчиска всей зоны'
+                        description = 'Вы уверены что хотете удалить все записи?'
+                        okText='Да'
+                        cancelText='Нет'
+                        onConfirm={handleRecordsClear}
+                    >
+                        <button className="btn">
+                            <span className="material-symbols-outlined">delete</span>
+                            Очистить зону
+                        </button>
+                    </Popconfirm>
+                </div>
+                <div className="nss-editor__content editor__list">
+                    <button onClick={handleRecordsAdd} className="editor__item editor__item-add-record">
+                        <span className="material-symbols-outlined">add</span>
+                        <span className='editor__item-add-text'>Добавить запись</span>
                     </button>
-                </Popconfirm>
+                    {resourceRecords.map((item) => {
+                        return <ResourceRecordItem key={item.id} resourceRecords={item} />
+                    })}
+                </div>
             </div>
-            <div className="nss-editor__content editor__list">
-                <button onClick={handleRecordsAdd} className="editor__item editor__item-add-record">
-                    <span className="material-symbols-outlined">add</span>
-                    <span className='editor__item-add-text'>Добавить запись</span>
-                </button>
-                {resourceRecords.map((item) => {
-                    return <ResourceRecordItem key={item.id} resourceRecords={item} updateRecords={handleUpdateRecord}  />
-                })}
-            </div>
-        </div>
-        {
-            modalOpen && <ModalRecord 
-            setIsOpen={(v) => setModalOpen(v)}
-            updateRecords={handleUpdateRecord} />
-        }
+            {
+                modalOpen && <ModalRecord 
+                setIsOpen={(v) => setModalOpen(v)} />
+            }
+        </ResourceRecordsContext>
     </>
 }

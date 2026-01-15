@@ -6,6 +6,7 @@ import ModalRecord from './ModalRecord/ModalRecord';
 import { DELETE_DNS_RECORD } from '@/lib/api_endpoint';
 import { instance } from '@/lib/axios_settings';
 import { DomenContext } from '@/app/(dashboard)/dashboard/[id]/dns/page';
+import { ResourceRecordsContext } from './ResourceRecords';
 
 import '@ant-design/v5-patch-for-react-19';
 import { useState, useContext } from 'react';
@@ -15,14 +16,14 @@ import type { PopconfirmProps } from 'antd';
 
 interface IProps {
     resourceRecords: IResourceRecords,
-    updateRecords: (resourceRecord: IResourceRecords, type: 'update' | 'delete') => void
 }
 
-export default function ResourceRecordItem({ resourceRecords, updateRecords } : IProps) {
+export default function ResourceRecordItem({ resourceRecords } : IProps) {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
     const { domen } = useContext(DomenContext);
+    const updateRecords = useContext(ResourceRecordsContext);
 
     const handleEdir = () => {
         setIsOpen(true);
@@ -76,7 +77,6 @@ export default function ResourceRecordItem({ resourceRecords, updateRecords } : 
             setIsOpen={(v:boolean) => setIsOpen(v)}
             type={resourceRecords.record_type}
             idRecord={resourceRecords.id.toString()}
-            updateRecords={updateRecords}
             dataRecord={{
                 'name': resourceRecords.name,
                 'value': resourceRecords.value,

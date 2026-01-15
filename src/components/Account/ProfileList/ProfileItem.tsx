@@ -1,28 +1,29 @@
 'use client';
 import './ProfilesList.scss';
-import { IProfileFiz, IProfileUrl } from './Profile';
+import { IProfile, IProfileFiz, IProfileUrl } from './Profile';
 import { TypeUser, getTranslateTypeUser } from "@/types/user";
 import { PROFILES_INDIVIDUAL_UPDATE, PROFILES_ORGANIZATION_UPDATE,
     PROFILES_INDIVIDUAL_DELETE, PROFILES_ORGANIZATION_DELETE } from '@/lib/api_endpoint';
 import { instance } from '@/lib/axios_settings';
 import { useNotificationStore } from '@/store/notificationStrore';
 import ModalProfileEditor from './ModalProfileEditor/ModalProfileEditor';
+import { ProfileContext } from './ProfileList';
 
 
 import '@ant-design/v5-patch-for-react-19';
 import { Popover, Popconfirm } from "antd";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 interface IProps {
     profile: IProfileFiz | IProfileUrl,
-    typeUser: TypeUser,
-    handleUpdate: () => void
+    typeUser: TypeUser
 }
 
-export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps) {
+export default function ProfileItem({ profile, typeUser } : IProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
     const { pushNotification } = useNotificationStore();
+    const handleUpdate = useContext(ProfileContext);
 
     const setDefaultProfile = () => {
 
@@ -37,7 +38,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
             return response.data;
         })
         .then(data => {
-            handleUpdate();
+            handleUpdate({typeProfile: typeUser, profile_data: data}, 'update');
 
             pushNotification({
                 messeage: `Профиль ${profile.profile_name} был обновлен`,
@@ -60,7 +61,7 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
 
         deleteRequst
         .then(() => {
-            handleUpdate();
+            handleUpdate({typeProfile: typeUser, profile_data: profile}, 'delete');
 
             pushNotification({
                 messeage: `Профиль ${profile.profile_name} был удален`,
@@ -136,6 +137,6 @@ export default function ProfileItem({ profile, typeUser, handleUpdate } : IProps
                 </Popconfirm>
             </div>
         </div>
-        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => {setIsOpen(v)}} handleUpdate={handleUpdate} profile={profile} typeUser={typeUser} />}
+        {isOpen && <ModalProfileEditor modalOpen={isOpen} setModalOpen={(v: boolean) => {setIsOpen(v)}} profile={profile} typeUser={typeUser} />}
     </>
 }
