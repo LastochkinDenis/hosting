@@ -9,39 +9,25 @@ import {
 } from "@/types/biling";
 import ResourceUsageItem from "@/Ui/ResourceUsageItem/ResourceUsageItem";
 import { getCurrentSubsctiption } from "@/lib/apiFucntion";
-import { BILLING_PLANS } from "@/lib/api_endpoint";
+import {
+  BILLING_PLANS,
+  BILLING_SUBSCRIPTIONS_CURRENT,
+} from "@/lib/api_endpoint";
 import SubscriptionItem from "@/components/Dashboard/SubsriptionsItem/SubscriptionItem";
 
 import { useState, useEffect } from "react";
 import { isAxiosError } from "axios";
+import { Popconfirm } from "antd";
 
 export default function Page() {
   const { pushNotification } = useNotificationStore();
-  const [currentSubscription, setCurrentSubscription] =
-    useState<ICurrentSubscription>();
+  const [currentSubscription, setCurrentSubscription] = useState<
+    ICurrentSubscription | undefined
+  >();
   const [subscriptions, setSubscriptions] = useState<Array<ISubscription>>([]);
 
   useEffect(() => {
-    getCurrentSubsctiption()
-      .then((data) => {
-        setCurrentSubscription(data);
-      })
-      .catch((e) => {
-        if (isAxiosError(e)) {
-          if(e.status != 404) {
-            pushNotification({
-              messeage: e.response?.data.detail,
-              type: 'error'
-            })
-          }
-        } else {
-          console.log(e);
-          pushNotification({
-            messeage: "Произошла ошибка загрузки тарифа",
-            type: "error",
-          });
-        }
-      });
+    getDataCurrentSubscription();
   }, []);
 
   useEffect(() => {
@@ -93,6 +79,48 @@ export default function Page() {
 
     getData();
   }, []);
+
+  const getDataCurrentSubscription = () => {
+    getCurrentSubsctiption()
+      .then((data) => {
+        setCurrentSubscription(data);
+      })
+      .catch((e) => {
+        if (isAxiosError(e)) {
+          if (e.status != 404) {
+            pushNotification({
+              messeage: e.response?.data.detail,
+              type: "error",
+            });
+          }
+        } else {
+          console.log(e);
+          pushNotification({
+            messeage: "Произошла ошибка загрузки тарифа",
+            type: "error",
+          });
+        }
+      });
+  };
+
+  const handleUnsubscription = () => {
+    instance
+      .delete(BILLING_SUBSCRIPTIONS_CURRENT)
+      .then((response) => response.data)
+      .then((data) => {
+        setCurrentSubscription(undefined);
+        pushNotification({
+          messeage: `Подписка ${currentSubscription?.plan.name} отменена`,
+          type: "info",
+        });
+      })
+      .catch((e) => {
+        pushNotification({
+          messeage: `Произошла ошибка во воремя отмены подписки ${currentSubscription?.plan.name}`,
+          type: "error",
+        });
+      });
+  };
 
   return (
     <>
@@ -173,6 +201,16 @@ export default function Page() {
               </div>
             )}
           </div>
+          <div className="current-subscription__bottom">
+            <Popconfirm
+              title={`Хотите отменить подпуску ${currentSubscription.plan.name}`}
+              onConfirm={handleUnsubscription}
+              okText="Да"
+              cancelText="Нет"
+            >
+              <button className="btn second">Отменить подписку</button>
+            </Popconfirm>
+          </div>
         </section>
       )}
       {subscriptions.length > 0 && (
@@ -182,6 +220,8 @@ export default function Page() {
               key={item.id}
               {...item}
               is_subscipted={item.id == currentSubscription?.plan.id}
+              is_have_subscipted={typeof currentSubscription != "undefined"}
+              handleUpdateSubscription={getDataCurrentSubscription}
             />
           ))}
         </div>

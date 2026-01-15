@@ -1,55 +1,98 @@
 .current-subscription {
-    padding: 1.875rem;
-    border-radius: 1.875rem;
-    background-color: var(--background);
-    border: 1px solid #94a3b859;
-    margin-bottom: 2rem;
+  padding: 1.875rem;
+  border-radius: 1.875rem;
+  background-color: var(--background);
+  border: 1px solid #94a3b859;
+  margin-bottom: 2rem;
 
-    &__top {
-        margin-bottom: 1.25rem;
-        gap: 1.25rem;
-        display: flex;
-        justify-content: space-between;
-    }
+  &__top {
+    margin-bottom: 1.25rem;
+    gap: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+  }
 
-    &__title {
+  &__title {
+    color: var(--text-color-primary);
+  }
+
+  &__data-end {
+    color: var(--text-color-second);
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 15% 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.625rem;
+  }
+
+  &__resourse-useage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+  }
+
+  &__info {
+    &-item {
+      margin-bottom: 1.25rem;
+
+      &-title {
         color: var(--text-color-primary);
-    }
+        margin-bottom: 0.625rem;
+        text-transform: uppercase;
+      }
 
-    &__data-end {
-        color: var(--text-color-second);
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
-
+  }
+}
+.subscription-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+@media (max-width: 1250px) {
+  .current-subscription {
     &__content {
-        display: grid;
-        grid-template-columns: 15% 1fr;
-        gap: 1.25rem;
+      grid-template-columns: 25% 1fr;
     }
+  }
+}
+@media (max-width: 1024px) {
+    .current-subscription {
+        padding: 1.25rem;
 
-    &__resourse-useage {
-        display: grid;
+        &__content {
+            grid-template-columns: 1fr;
+        }
+        &__info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.625rem;
+        }
+    }
+    .subscription-list {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.625rem;
     }
-
-    &__info {
-        &-item {
-            margin-bottom: 1.25rem;
-
-            &-title {
-                color: var(--text-color-primary);
-                margin-bottom: 0.625rem;
-                text-transform: uppercase;
-            }
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-    }
 }
-.subscription-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+@media (max-width: 600px) {
+    .current-subscription {
+        &__info,
+        &__resourse-useage {
+            grid-template-columns: 1fr;
+        }        
+    }
+    .subscription-list {
+        grid-template-columns: 1fr;
+    }   
 }

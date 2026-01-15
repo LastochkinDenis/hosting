@@ -1,17 +1,24 @@
 "use cleint";
 import "./SubscriptionItem.scss";
-import { ISubscription } from "@/types/biling";
+import { ICurrentSubscription, ISubscription } from "@/types/biling";
 import { TRANSLATE_RESOURCE_USAGE, UNIT_RESOURCE_USAGE } from "@/lib/constData";
 import { instance } from "@/lib/axios_settings";
-import { BILLING_SUBSCRIPTIONS_CURRENT } from "@/lib/api_endpoint";
+import {
+  BILLING_SUBSCRIPTIONS_CURRENT,
+  BILLING_SUBSCRIPTIONS,
+  SUBSCRIPTIONS_LIMIT
+} from "@/lib/api_endpoint";
 import { useNotificationStore } from "@/store/notificationStrore";
 import "@ant-design/v5-patch-for-react-19";
 
 import { Popconfirm } from "antd";
 import { isAxiosError } from "axios";
+import { platform } from "os";
 
 interface IProps extends ISubscription {
   is_subscipted: boolean;
+  is_have_subscipted?: boolean;
+  handleUpdateSubscription?: () => void
 }
 
 export default function SubscriptionItem({
@@ -23,17 +30,29 @@ export default function SubscriptionItem({
   is_active,
   resource,
   is_subscipted,
+  is_have_subscipted,
+  handleUpdateSubscription
 }: IProps) {
   const { pushNotification } = useNotificationStore();
 
   const handleChangeSubcription = () => {
-    instance
-      .put(BILLING_SUBSCRIPTIONS_CURRENT, {
-        plan_id: id,
-        auto_renew: true,
-      })
+    const requestSubsciptionItem = is_have_subscipted
+      ? instance.put(BILLING_SUBSCRIPTIONS_CURRENT, {
+          plan_id: id,
+          auto_renew: true,
+        })
+      : instance.post(BILLING_SUBSCRIPTIONS, {
+          plan_id: id,
+          auto_renew: true,
+        });
+
+    requestSubsciptionItem
       .then((response) => response.data)
       .then((data) => {
+        if(typeof handleUpdateSubscription != 'undefined') {
+          handleUpdateSubscription();
+        }
+
         pushNotification({
           messeage: `Тариф ${name} подключен`,
           type: "success",

@@ -35,3 +35,4 @@ export const BILLING_SUBSCRIPTIONS_CURRENT = '/billing/subscriptions/current';
 export const BALANCE = '/billing/balance';
 export const USED_RESOURCES = '/billing/resources';
 export const SUBSCRIPTIONS_LIMIT = '/billing/subscription/limits';
+export const BILLING_SUBSCRIPTIONS = '/billing/subscriptions'
