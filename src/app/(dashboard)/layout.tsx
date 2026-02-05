@@ -15,16 +15,16 @@ export default function DashboardLayout({
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   
-  useLayoutEffect(() => {
-    if (!isAuthenticated && isAuthenticated !== null) {
-      // router.push('/login');
-      redirect('/login');
-    }
-  }, [isAuthenticated, router]);
+  // useLayoutEffect(() => {
+  //   if (!isAuthenticated && isAuthenticated !== null) {
+  //     // router.push('/login');
+  //     redirect('/login');
+  //   }
+  // }, [isAuthenticated, router]);
 
-  if (isAuthenticated === null) {
-    return null;
-  }
+  // if (isAuthenticated === null) {
+  //   return null;
+  // }
 
   return (
     <div className="dashboard-layout">

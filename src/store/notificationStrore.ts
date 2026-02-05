@@ -19,6 +19,8 @@ export const useNotificationStore = create<INotificationStore>()(
         (set, get) => ({
             notifications: [],
             pushNotification: (notification) => {
+                if(typeof notification.messeage != 'string') return
+
                 notification.id = notification.messeage + get().notifications.length;
 
                 set(() => ({
